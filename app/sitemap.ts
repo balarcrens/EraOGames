@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { games, categories } from "@/data/games";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://www.eraogames.com";
+  const baseUrl = "https://eraogames.vercel.app";
 
   // Core static routes
   const routes = [
@@ -15,7 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/cookies",
     "/category/all",
   ].map((route) => ({
-    url: `${baseUrl}${route}`,
+    url: `${baseUrl}${route}/`,
     lastModified: new Date(),
     changeFrequency: "daily" as const,
     priority: route === "" ? 1.0 : 0.8,
@@ -23,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Game category landing pages
   const categoryRoutes = categories.map((cat) => ({
-    url: `${baseUrl}/category/${cat.name.toLowerCase()}`,
+    url: `${baseUrl}/category/${cat.name.toLowerCase()}/`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority: 0.7,
@@ -31,7 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Individual game detail pages
   const gameRoutes = games.map((game) => ({
-    url: `${baseUrl}/game/${game.slug}`,
+    url: `${baseUrl}/game/${game.slug}/`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority: 0.6,

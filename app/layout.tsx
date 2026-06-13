@@ -8,6 +8,53 @@ export const metadata: Metadata = {
   description:
     "Play thousands of free browser games instantly at EraOGames - the ultimate Era of Games. Enjoy classic OG era games, HTML5 puzzle, racing, action & arcade games. No downloads, no installs, pure instant fun!",
   keywords: "EraOGames, OG Era Games, Era of Games, free online games, HTML5 games, play free games, browser games, instant play games, retro games, classic games portal, play games online, free browser games",
+  metadataBase: new URL("https://eraogames.vercel.app"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "EraOGames - Play Free Online Games | OG Era Games & Era of Games",
+    description:
+      "Play thousands of free browser games instantly at EraOGames - the ultimate Era of Games. Enjoy classic OG era games, HTML5 puzzle, racing, action & arcade games. No downloads, no installs, pure instant fun!",
+    url: "https://eraogames.vercel.app/",
+    siteName: "EraOGames",
+    images: [
+      {
+        url: "/ogimage.jpg",
+        width: 1200,
+        height: 630,
+        alt: "EraOGames - Play Free Online Games | OG Era Games & Era of Games",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "EraOGames - Play Free Online Games | OG Era Games & Era of Games",
+    description:
+      "Play thousands of free browser games instantly at EraOGames - the ultimate Era of Games. Enjoy classic OG era games, HTML5 puzzle, racing, action & arcade games. No downloads, no installs, pure instant fun!",
+    images: ["/ogimage.jpg"],
+  },
+  icons: {
+    icon: [
+      { url: "/icon.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon.png", sizes: "16x16", type: "image/png" },
+    ],
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -16,10 +63,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     "@type": "WebSite",
     "name": "EraOGames",
     "alternateName": ["OG Era Games", "Era of Games"],
-    "url": "https://www.eraogames.com",
+    "url": "https://eraogames.vercel.app",
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://www.eraogames.com/games?search={search_term_string}",
+      "target": "https://eraogames.vercel.app/games?search={search_term_string}",
       "query-input": "required name=search_term_string"
     }
   };
