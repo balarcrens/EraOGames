@@ -2,14 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@700&family=Patrick+Hand&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap');
 
 :root {
-  --shadow-color: #2d2d2d;
+  --shadow-color: rgba(99, 102, 241, 0.05);
+  --neon-glow: 0 0 15px rgba(99, 102, 241, 0.15);
 }
 
 .dark {
-  --shadow-color: #fdfbf7;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --neon-glow: 0 0 20px rgba(139, 92, 246, 0.25);
 }
 
 @layer base {
@@ -18,232 +20,172 @@
   }
 
   body {
-    @apply bg-[#fdfbf7] dark:bg-[#18181c] text-[#2d2d2d] dark:text-[#fdfbf7] font-hand antialiased transition-colors duration-200;
+    @apply bg-slate-50 dark:bg-[#07090e] text-[#0f172a] dark:text-[#e2e8f0] font-sans antialiased transition-colors duration-300;
+  }
+
+  a, button, select, input[type="range"], input[type="submit"], [role="button"] {
+    cursor: pointer !important;
   }
 
   ::selection {
-    background: #ff4d4d;
-    color: #fdfbf7;
+    background: #8b5cf6;
+    color: #ffffff;
   }
 
   ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
   }
   ::-webkit-scrollbar-track {
-    @apply bg-[#fdfbf7] dark:bg-[#18181c] border-2 border-[#2d2d2d] dark:border-[#fdfbf7];
+    @apply bg-slate-100 dark:bg-[#0b0e14] border-l border-slate-200/50 dark:border-slate-800/50;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-[#2d2d2d] dark:bg-[#fdfbf7];
+    @apply bg-slate-300 dark:bg-[#1b2234] rounded-full border border-solid border-slate-100 dark:border-[#0b0e14] hover:bg-indigo-500 dark:hover:bg-indigo-600 transition-colors;
   }
 }
 
 @layer components {
-  .sketch-container {
-    @apply border-2 border-[#2d2d2d] dark:border-[#fdfbf7];
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-  }
-
-  .sketch-container-md {
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-  }
-
-  .tape-top {
-    position: relative;
-  }
-
-  .tape-top::before,
-  .tape-top::after {
-    content: '';
-    position: absolute;
-    top: -8px;
-    width: 40px;
-    height: 20px;
-    background: rgba(229, 224, 216, 0.7);
-    border: 2px solid #2d2d2d;
-    z-index: 10;
-    border-radius: 2px;
-    transform: rotate(-3deg);
-    transition: background-color 0.2s, border-color 0.2s;
-  }
-
-  .dark .tape-top::before,
-  .dark .tape-top::after {
-    background: rgba(45, 45, 50, 0.8);
-    border-color: #fdfbf7;
-  }
-
-  .tape-top::before {
-    left: 10%;
-  }
-
-  .tape-top::after {
-    right: 10%;
-    transform: rotate(3deg);
-  }
-
-  .pin {
-    position: relative;
-  }
-
-  .pin::before {
-    content: '';
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 16px;
-    height: 16px;
-    background: #ff4d4d;
-    border: 2px solid #2d2d2d;
-    border-radius: 50%;
-    z-index: 15;
-    box-shadow: 2px 2px 0 #2d2d2d;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-
-  .dark .pin::before {
-    border-color: #fdfbf7;
-    box-shadow: 2px 2px 0 #fdfbf7;
-  }
-
-  .doodle-underline {
-    @apply relative inline-block;
-  }
-
-  .doodle-underline::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: #ff4d4d;
-    border-radius: 2px;
-  }
-
+  /* Ultra-Premium gaming card styling */
   .sketch-card {
-    @apply bg-white dark:bg-[#242429] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] shadow-sketch transition-all duration-200;
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    @apply bg-white dark:bg-[#0e1320] border border-slate-200/80 dark:border-slate-800 rounded-2xl transition-all duration-300 relative overflow-hidden;
+    box-shadow: 0 10px 30px -15px var(--shadow-color);
+  }
+
+  .sketch-card::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-fuchsia-500/10 opacity-0 transition-opacity duration-300 pointer-events-none;
   }
 
   .sketch-card:hover {
-    @apply shadow-sketch-hover;
-    transform: translateY(-2px);
+    @apply border-indigo-500/50 dark:border-violet-500/50;
+    box-shadow: var(--neon-glow), 0 20px 40px -15px var(--shadow-color);
+    transform: translateY(-5px) scale(1.015);
+  }
+  
+  .sketch-card:hover::before {
+    @apply opacity-100;
   }
 
   .sketch-card:active {
-    transform: translateY(3px);
-    box-shadow: none;
+    transform: translateY(-1px) scale(0.99);
   }
 
+  /* Premium interactive gaming buttons */
   .sketch-btn {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 font-hand font-bold text-sm uppercase tracking-wider
-           bg-white dark:bg-[#242429] text-[#2d2d2d] dark:text-[#fdfbf7] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] shadow-sketch
-           hover:bg-[#ff4d4d] hover:text-white dark:hover:bg-[#ff6b6b] hover:shadow-sketch-hover
-           active:translate-y-[3px] active:shadow-none
-           transition-all duration-150;
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3.5 font-sans font-bold text-sm tracking-wide uppercase rounded-xl
+           bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 text-white shadow-lg shadow-indigo-500/20
+           hover:shadow-indigo-500/40 dark:hover:shadow-violet-600/30 hover:brightness-110 active:scale-[0.97]
+           transition-all duration-200 cursor-pointer relative overflow-hidden;
+  }
+
+  .sketch-btn::after {
+    content: '';
+    @apply absolute inset-0 bg-white/10 translate-y-full transition-transform duration-300 ease-out;
+  }
+
+  .sketch-btn:hover::after {
+    @apply translate-y-0;
   }
 
   .sketch-btn-sm {
-    @apply sketch-btn px-4 py-2 text-xs;
+    @apply sketch-btn px-4 py-2.5 text-xs;
   }
 
+  /* Input fields refined for cyber gaming dashboard style */
   .sketch-input {
-    @apply w-full px-4 py-3 bg-white dark:bg-[#242429] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] font-hand text-sm text-[#2d2d2d] dark:text-[#fdfbf7]
-           placeholder:text-[#2d2d2d]/40 dark:placeholder:text-[#fdfbf7]/40 focus:outline-none focus:border-[#2d5da1] dark:focus:border-[#4dabf7] transition-all;
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    @apply w-full px-4 py-3 bg-white dark:bg-[#0e1320] border border-slate-200 dark:border-slate-800 rounded-xl font-sans text-sm text-slate-800 dark:text-gray-100
+           placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all duration-200;
+  }
+
+  /* Containers mapped to sleek layout */
+  .sketch-container,
+  .sketch-container-md {
+    @apply bg-white dark:bg-[#0e1320] border border-slate-200 dark:border-slate-800 rounded-2xl;
+    box-shadow: 0 10px 35px -15px var(--shadow-color);
   }
 
   .sticky-note {
-    @apply bg-white dark:bg-[#242429] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] shadow-sketch relative;
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    @apply bg-white dark:bg-[#0e1320] border border-slate-200/80 dark:border-slate-800 rounded-2xl;
   }
 
+  .tape-top::before,
+  .tape-top::after,
+  .pin::before,
   .sticky-note::before {
-    content: '';
-    position: absolute;
-    top: -6px;
-    left: 50%;
-    transform: translateX(-50%) rotate(-2deg);
-    width: 30px;
-    height: 14px;
-    background: rgba(229, 224, 216, 0.6);
-    border: 2px solid #2d2d2d;
-    border-radius: 2px;
-    transition: background-color 0.2s, border-color 0.2s;
+    display: none !important;
   }
 
-  .dark .sticky-note::before {
-    background: rgba(45, 45, 50, 0.7);
-    border-color: #fdfbf7;
-  }
-
+  /* Glowing badge tags */
   .doodle-badge {
-    @apply inline-flex items-center gap-1 px-3 py-1 text-xs font-hand font-bold uppercase tracking-wide
-           bg-white dark:bg-[#242429] text-[#2d2d2d] dark:text-[#fdfbf7] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] shadow-sketch-sm;
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    @apply inline-flex items-center gap-1 px-3 py-1 text-[10px] font-display font-bold uppercase tracking-wider
+           bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 border border-indigo-100/50 dark:border-indigo-900/30 rounded-full;
   }
 
+  /* Gaming Title Headers */
   .doodle-section-title {
-    @apply text-2xl md:text-3xl font-doodle font-bold text-[#2d2d2d] dark:text-[#fdfbf7] flex items-center gap-3 relative;
+    @apply text-xl md:text-2xl lg:text-3xl font-display font-bold text-slate-800 dark:text-white flex items-center gap-3 relative pl-4 border-l-4 border-indigo-500 dark:border-violet-500;
   }
 
   .doodle-separator {
-    @apply border-t-2 border-dashed border-[#e5e0d8] dark:border-[#44444a] my-8;
+    @apply border-t border-slate-200 dark:border-slate-900 my-8;
   }
 
+  /* Custom styled Game Card overlay */
   .game-card {
-    @apply sticky-note overflow-hidden cursor-pointer;
+    @apply sticky-note overflow-hidden cursor-pointer transition-all duration-300;
   }
 
   .game-card .play-overlay {
     @apply absolute inset-0 flex items-center justify-center
-           bg-[#fdfbf7]/70 dark:bg-[#18181c]/80 opacity-0 group-hover:opacity-100
+           bg-[#06080c]/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100
            transition-all duration-300;
   }
 
   .game-card .play-overlay .play-icon {
-    @apply w-14 h-14 flex items-center justify-center
-           bg-white dark:bg-[#242429] text-[#ff4d4d] dark:text-[#ff6b6b] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] shadow-sketch-sm
+    @apply w-12 h-12 rounded-full flex items-center justify-center
+           bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500 text-white shadow-lg shadow-violet-500/40
            transform scale-75 group-hover:scale-100
            transition-all duration-300;
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
   }
 
   .game-card .game-info {
     @apply absolute bottom-0 left-0 right-0 p-3.5;
-    background: linear-gradient(to top, #fdfbf7 0%, transparent 100%);
+    background: linear-gradient(to top, rgba(6, 8, 12, 0.95) 0%, rgba(6, 8, 12, 0) 100%);
     transition: background 0.2s;
   }
 
-  .dark .game-card .game-info {
-    background: linear-gradient(to top, #18181c 0%, transparent 100%);
-  }
-
+  /* Game category pill chips */
   .chip {
-    @apply px-4 py-2 text-sm font-hand font-bold border-2 border-[#2d2d2d] dark:border-[#fdfbf7] transition-all duration-150;
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    @apply px-4 py-2 text-xs font-sans font-bold uppercase tracking-wider rounded-lg border transition-all duration-200;
   }
 
   .chip-active {
-    @apply chip bg-[#ff4d4d] dark:bg-[#ff6b6b] text-white shadow-sketch-sm;
+    @apply chip bg-gradient-to-r from-indigo-600 via-violet-600 to-violet-600 text-white border-transparent shadow-md shadow-indigo-500/20;
   }
 
   .chip-default {
-    @apply chip bg-white dark:bg-[#242429] text-[#2d2d2d] dark:text-[#fdfbf7] shadow-sketch-sm hover:shadow-sketch-hover hover:-translate-y-0.5;
+    @apply chip bg-white dark:bg-[#0e1320] text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:border-violet-500 dark:hover:border-violet-500/50 hover:bg-slate-50 dark:hover:bg-slate-800/40;
+  }
+  
+  .doodle-underline {
+    @apply relative inline-block;
+  }
+  .doodle-underline::after {
+    content: '';
+    @apply absolute bottom-0 left-0 right-0 h-[2px] bg-violet-500 rounded;
   }
 }
 
 @layer utilities {
-  .rotate-1 { transform: rotate(1deg); }
-  .rotate-2 { transform: rotate(2deg); }
-  .rotate-neg1 { transform: rotate(-1deg); }
-  .rotate-neg2 { transform: rotate(-2deg); }
-
-  .sketch-delay-100 { animation-delay: 0.1s; }
-  .sketch-delay-200 { animation-delay: 0.2s; }
-  .sketch-delay-300 { animation-delay: 0.3s; }
-  .sketch-delay-400 { animation-delay: 0.4s; }
-  .sketch-delay-500 { animation-delay: 0.5s; }
+  .rotate-1, .rotate-2, .rotate-neg1, .rotate-neg2 {
+    transform: rotate(0deg) !important;
+  }
+  .sketch-delay-100, .sketch-delay-200, .sketch-delay-300, .sketch-delay-400, .sketch-delay-500 {
+    animation-delay: 0s !important;
+  }
+  
+  /* Animatable spin elements */
+  .animate-spin-slow {
+    animation: spin 8s linear infinite;
+  }
 }

@@ -3,29 +3,33 @@ import { LogoIcon, GamepadIcon, ShieldIcon, FileTextIcon, MailIcon, ArrowRightIc
 
 export default function Footer() {
   return (
-    <footer className="relative border-t-2 border-[#2d2d2d] dark:border-[#fdfbf7] bg-[#fdfbf7] dark:bg-[#18181c] overflow-hidden transition-colors duration-200">
+    <footer className="relative border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-[#090d16] overflow-hidden transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-12 md:py-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
-            <div className="space-y-4" style={{ transform: "rotate(-0.5deg)" }}>
-              <Link href="/" className="flex items-center gap-2.5 group">
-                <LogoIcon className="w-8 h-8" />
-                <span className="text-xl font-doodle font-bold text-[#2d2d2d] dark:text-[#fdfbf7]">EraOGames</span>
+            <div className="space-y-4">
+              <Link 
+                href="/" 
+                className="flex items-center gap-2.5 group"
+                aria-label="EraOGames home page logo footer link"
+              >
+                <LogoIcon className="w-8 h-8 text-indigo-600 dark:text-violet-500 transition-transform duration-300 group-hover:scale-110" />
+                <span className="text-xl font-display font-bold tracking-wider text-slate-800 dark:text-gray-100">EraOGames</span>
               </Link>
-              <p className="text-sm font-hand text-[#2d2d2d]/60 dark:text-[#fdfbf7]/60 leading-relaxed max-w-xs">
+              <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-xs">
                 Your absolute destination for the best free online games. Experience the classic OG Era Games and explore a modern Era of Games instantly in your browser — zero downloads, no hassle.
               </p>
-              <div className="flex items-center gap-2 text-sm font-hand text-[#2d2d2d]/50 dark:text-[#fdfbf7]/50">
-                <GamepadIcon className="w-4 h-4" />
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 dark:text-slate-500">
+                <GamepadIcon className="w-4 h-4 text-indigo-500" />
                 <span>Thousands of free games online</span>
               </div>
             </div>
 
-            <div className="space-y-4" style={{ transform: "rotate(0.5deg)" }}>
-              <h3 className="text-sm font-doodle font-bold text-[#2d2d2d] dark:text-[#fdfbf7] uppercase tracking-wider doodle-underline inline-block">
+            <div className="space-y-4">
+              <h3 className="text-sm font-display font-bold text-slate-800 dark:text-gray-100 uppercase tracking-widest relative pb-2 border-b border-slate-100 dark:border-slate-800/60 inline-block min-w-[120px]">
                 Quick Links
               </h3>
-              <ul className="space-y-3 mt-4">
+              <ul className="space-y-2.5 mt-4">
                 {[
                   { label: "Browse All Games", href: "/games", icon: GamepadIcon },
                   { label: "Game Categories", href: "/category/all", icon: GridIcon },
@@ -38,10 +42,11 @@ export default function Footer() {
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="flex items-center gap-2 text-sm font-hand text-[#2d2d2d]/60 dark:text-[#fdfbf7]/60 hover:text-[#ff4d4d] dark:hover:text-[#ff6b6b] transition-colors duration-150 group"
+                        aria-label={`Browse page category ${link.label}`}
+                        className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-violet-400 transition-colors duration-150 group font-medium"
                       >
-                        <Icon className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                        {link.label}
+                        <Icon className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                        <span>{link.label}</span>
                       </Link>
                     </li>
                   );
@@ -49,11 +54,11 @@ export default function Footer() {
               </ul>
             </div>
 
-            <div className="space-y-4" style={{ transform: "rotate(-0.3deg)" }}>
-              <h3 className="text-sm font-doodle font-bold text-[#2d2d2d] dark:text-[#fdfbf7] uppercase tracking-wider doodle-underline inline-block">
+            <div className="space-y-4">
+              <h3 className="text-sm font-display font-bold text-slate-800 dark:text-gray-100 uppercase tracking-widest relative pb-2 border-b border-slate-100 dark:border-slate-800/60 inline-block min-w-[120px]">
                 Support
               </h3>
-              <ul className="space-y-3 mt-4">
+              <ul className="space-y-2.5 mt-4">
                 {[
                   { label: "Privacy Policy", href: "/privacy", icon: ShieldIcon },
                   { label: "Terms of Service", href: "/terms", icon: FileTextIcon },
@@ -64,17 +69,18 @@ export default function Footer() {
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="flex items-center gap-2 text-sm font-hand text-[#2d2d2d]/60 dark:text-[#fdfbf7]/60 hover:text-[#ff4d4d] dark:hover:text-[#ff6b6b] transition-colors duration-150 group"
+                        aria-label={`View policy sheet ${link.label}`}
+                        className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-violet-400 transition-colors duration-150 group font-medium"
                       >
-                        <Icon className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                        {link.label}
+                        <Icon className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                        <span>{link.label}</span>
                       </Link>
                     </li>
                   );
                 })}
               </ul>
               <div className="pt-4">
-                <p className="text-xs font-hand text-[#2d2d2d]/40 dark:text-[#fdfbf7]/40 leading-relaxed">
+                <p className="text-xs text-slate-400 dark:text-slate-500 leading-relaxed">
                   Questions or feedback? Reach out to us anytime.
                 </p>
               </div>
@@ -82,9 +88,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t-2 border-dashed border-[#e5e0d8] dark:border-[#44444a] py-6">
+        <div className="border-t border-slate-200 dark:border-slate-800/70 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-xs font-hand text-[#2d2d2d]/50 dark:text-[#fdfbf7]/50">
+            <p className="text-xs text-slate-400 dark:text-slate-500">
               &copy; {new Date().getFullYear()} EraOGames. All rights reserved.
             </p>
             <div className="flex items-center gap-4">
@@ -96,7 +102,8 @@ export default function Footer() {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="text-xs font-hand text-[#2d2d2d]/50 dark:text-[#fdfbf7]/50 hover:text-[#ff4d4d] dark:hover:text-[#ff6b6b] transition-colors"
+                  aria-label={`View ${item.label} documents`}
+                  className="text-xs text-slate-400 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-violet-400 transition-colors"
                 >
                   {item.label}
                 </Link>

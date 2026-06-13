@@ -1,36 +1,40 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import type { Game } from "@/types";
-import FullscreenButton from "@/components/FullscreenButton";
 import GameCard from "@/components/GameCard";
 import {
-  HomeIcon,
-  GridIcon,
-  ChevronRightIcon,
-  RatingStarIcon,
-  EyeIcon,
-  PlayIcon,
-  GamepadIcon,
-  ActionIcon,
-  RacingIcon,
-  PuzzleIcon,
-  AdventureIcon,
-  MultiplayerIcon,
-  SportsIcon,
-  ArcadeIcon,
-} from "@/components/Icons";
+  Home,
+  ChevronRight,
+  Star,
+  Eye,
+  Gamepad2,
+  ThumbsUp,
+  ThumbsDown,
+  BookOpen,
+  Keyboard,
+  HelpCircle,
+  ChevronDown,
+  Check,
+  Swords,
+  Car,
+  Brain,
+  Compass,
+  Users,
+  Trophy,
+  Gamepad
+} from "lucide-react";
 import type { GameCategory } from "@/types";
 
-const detailIconMap: Record<GameCategory, React.FC<{ className?: string }>> = {
-  Action: ActionIcon,
-  Racing: RacingIcon,
-  Puzzle: PuzzleIcon,
-  Adventure: AdventureIcon,
-  Multiplayer: MultiplayerIcon,
-  Sports: SportsIcon,
-  Arcade: ArcadeIcon,
+const detailIconMap: Record<GameCategory, React.ComponentType<{ className?: string }>> = {
+  Action: Swords,
+  Racing: Car,
+  Puzzle: Brain,
+  Adventure: Compass,
+  Multiplayer: Users,
+  Sports: Trophy,
+  Arcade: Gamepad,
 };
 
 interface GameDetailClientProps {
@@ -43,6 +47,31 @@ export default function GameDetailClient({ game, related }: GameDetailClientProp
   const [isLoading, setIsLoading] = useState(true);
   const CategoryIcon = detailIconMap[game.category];
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
+
+  // UX states: Local Upvote/Downvote
+  const [userVote, setUserVote] = useState<"up" | "down" | null>(null);
+
+  // Sync vote on mount
+  useEffect(() => {
+    try {
+      const vote = localStorage.getItem(`eraogames_vote_${game.slug}`);
+      if (vote === "up" || vote === "down") {
+        setUserVote(vote);
+      }
+    } catch (_) {}
+  }, [game.slug]);
+
+  const handleVote = (type: "up" | "down") => {
+    try {
+      if (userVote === type) {
+        localStorage.removeItem(`eraogames_vote_${game.slug}`);
+        setUserVote(null);
+      } else {
+        localStorage.setItem(`eraogames_vote_${game.slug}`, type);
+        setUserVote(type);
+      }
+    } catch (_) {}
+  };
 
   // Dynamic control keys list derived from instructions
   const controlKeys = (() => {
@@ -62,7 +91,7 @@ export default function GameDetailClient({ game, related }: GameDetailClientProp
       keys.push({ key: "MOUSE L-CLICK", action: "Aim / Shoot / Select Items" });
     }
     if (lowercase.includes("shift")) {
-      keys.push({ key: "SHIFT KEY", action: "Drift Around Corners / Run" });
+      keys.push({ key: "SHIFT KEY", action: "Drift / Run" });
     }
     if (lowercase.includes("z") || lowercase.includes("x")) {
       keys.push({ key: "Z / X KEYS", action: "Pass / Shoot Ball / Specials" });
@@ -78,7 +107,7 @@ export default function GameDetailClient({ game, related }: GameDetailClientProp
     const base = [
       "Instant Play in Browser (No Downloads or Hassle)",
       "Fully Responsive Layout optimized for all screens",
-      "Sketch-style classic Retro Art details",
+      "Sleek modern High-Fidelity display details",
     ];
     if (game.category === "Action" || game.category === "Racing" || game.category === "Arcade") {
       return [
@@ -120,91 +149,126 @@ export default function GameDetailClient({ game, related }: GameDetailClientProp
     },
     {
       q: `How does EraOGames save my high scores and progress in ${game.title}?`,
-      a: `This game saves score metrics and Stage progress local file storage directly inside your browser cache. Clearing your browser cookies or history data may reset these variables.`,
+      a: `This game saves score metrics and stage progress local file storage directly inside your browser cache. Clearing your browser cookies or history data may reset these variables.`,
     },
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
-      <div className="flex items-center gap-1.5 text-xs md:text-sm font-hand text-[#2d2d2d]/50 dark:text-[#fdfbf7]/50 mb-6">
-        <Link href="/" className="flex items-center gap-1 hover:text-[#ff4d4d] transition-colors">
-          <HomeIcon className="w-3.5 h-3.5" />
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 font-sans">
+      {/* Breadcrumbs */}
+      <div className="flex items-center gap-2 text-xs md:text-sm text-slate-400 dark:text-slate-500 mb-6 font-medium">
+        <Link 
+          href="/" 
+          className="flex items-center gap-1 hover:text-indigo-600 transition-colors"
+          aria-label="Back to EraOGames Home page"
+        >
+          <Home className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Home</span>
         </Link>
-        <ChevronRightIcon className="w-3 h-3" />
-        <Link href="/games" className="flex items-center gap-1 hover:text-[#ff4d4d] transition-colors">
-          <GridIcon className="w-3.5 h-3.5" />
+        <ChevronRight className="w-3 h-3 text-slate-400 dark:text-slate-700" />
+        <Link 
+          href="/games" 
+          className="flex items-center gap-1 hover:text-indigo-600 transition-colors"
+          aria-label="Browse all games"
+        >
+          <Gamepad2 className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Games</span>
         </Link>
-        <ChevronRightIcon className="w-3 h-3" />
-        <span className="text-[#2d2d2d]/60 dark:text-[#fdfbf7]/60 truncate max-w-[120px] sm:max-w-[200px]">{game.title}</span>
+        <ChevronRight className="w-3 h-3 text-slate-400 dark:text-slate-700" />
+        <span className="text-slate-500 dark:text-slate-400 font-semibold truncate max-w-[120px] sm:max-w-[200px]">{game.title}</span>
       </div>
 
-      <div className="flex flex-col lg:flex-row items-start justify-between gap-4 mb-6">
+      {/* Header Panel */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <div className="flex items-start gap-4">
-          <div className="hidden sm:flex w-14 h-14 bg-white dark:bg-[#242429] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] shadow-sketch-sm items-center justify-center shrink-0 text-[#2d2d2d] dark:text-[#fdfbf7]"
-            style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+          <div className="hidden sm:flex w-14 h-14 bg-white dark:bg-[#121824] border border-slate-200 dark:border-slate-800 shadow-sm items-center justify-center shrink-0 rounded-2xl text-indigo-500"
           >
-            <GamepadIcon className="w-7 h-7" />
+            <Gamepad2 className="w-7 h-7" />
           </div>
           <div>
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-doodle font-bold text-[#2d2d2d] dark:text-[#fdfbf7] tracking-tight leading-tight">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-display font-bold text-slate-800 dark:text-white tracking-wide leading-tight">
               {game.title}
             </h1>
-            <div className="flex flex-wrap items-center gap-3 mt-2">
-              <div className="doodle-badge text-[10px] flex items-center gap-1.5">
+            <div className="flex flex-wrap items-center gap-3.5 mt-2 text-xs md:text-sm font-semibold">
+              <Link 
+                href={`/category/${game.category.toLowerCase()}`}
+                className="doodle-badge text-[10px] flex items-center gap-1.5 px-3 py-1 bg-violet-50 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 border border-violet-100 dark:border-violet-900/30 rounded-full hover:border-violet-500 transition-colors"
+                aria-label={`Browse games in ${game.category}`}
+              >
                 {CategoryIcon && <CategoryIcon className="w-3.5 h-3.5" />}
-                {game.category}
-              </div>
-              <span className="flex items-center gap-1 text-sm font-hand font-bold text-[#2d2d2d] dark:text-[#fdfbf7]">
-                <RatingStarIcon className="w-4 h-4 text-[#ff4d4d]" />
-                {game.rating}
+                <span>{game.category}</span>
+              </Link>
+              <span className="flex items-center gap-1 text-amber-500">
+                <Star className="w-4 h-4 fill-current" />
+                <span>{game.rating.toFixed(1)}</span>
               </span>
-              <span className="flex items-center gap-1.5 text-sm font-hand text-[#2d2d2d]/50 dark:text-[#fdfbf7]/50">
-                <EyeIcon className="w-4 h-4" />
-                {game.plays.toLocaleString()} plays
+              <span className="flex items-center gap-1.5 text-slate-400 dark:text-slate-500">
+                <Eye className="w-4 h-4" />
+                <span>{game.plays.toLocaleString()} plays</span>
               </span>
             </div>
           </div>
         </div>
-        <FullscreenButton iframeRef={iframeRef} />
+        
+        {/* Buttons Controls */}
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0 self-start lg:self-center">
+          {/* Rate Game: Upvote/Downvote */}
+          <div className="flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-[#121824] shadow-sm">
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400">Rate Game:</span>
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => handleVote("up")}
+                className={`w-8.5 h-8.5 rounded-lg flex items-center justify-center text-xs transition-all ${
+                  userVote === "up"
+                    ? "bg-emerald-500 text-white shadow-sm"
+                    : "text-slate-400 hover:text-emerald-500 hover:bg-slate-50 dark:hover:bg-slate-800"
+                }`}
+                aria-label="Upvote this game with a thumbs up"
+              >
+                <ThumbsUp className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => handleVote("down")}
+                className={`w-8.5 h-8.5 rounded-lg flex items-center justify-center text-xs transition-all ${
+                  userVote === "down"
+                    ? "bg-red-500 text-white shadow-sm"
+                    : "text-slate-400 hover:text-red-500 hover:bg-slate-50 dark:hover:bg-slate-800"
+                }`}
+                aria-label="Downvote this game with a thumbs down"
+              >
+                <ThumbsDown className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div
-        className="relative w-full aspect-video mb-6 md:mb-8 bg-[#fdfbf7] dark:bg-[#18181c] border-[3px] border-[#2d2d2d] dark:border-[#fdfbf7] shadow-sketch pin tape-top transition-colors duration-200"
-        style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px", transform: "rotate(-0.5deg)" }}
+      {/* Game Screen Container - scaled height/width */}
+      <div className="relative w-full mb-6 md:mb-8 bg-white dark:bg-[#121824] border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden rounded-3xl h-[480px] sm:h-[500px] md:h-[580px] lg:h-[680px] w-full"
       >
         {isLoading && (
-          <div className="absolute inset-0 z-30 bg-[#fdfbf7] dark:bg-[#18181c] flex flex-col items-center justify-center rounded-[inherit] transition-opacity duration-300">
+          <div className="absolute inset-0 z-30 bg-white dark:bg-[#080b11] flex flex-col items-center justify-center transition-opacity duration-300">
             <div className="flex flex-col items-center gap-4 text-center p-4">
               <div className="relative w-16 h-16 flex items-center justify-center">
-                <div className="absolute inset-0 border-4 border-dashed border-[#2d2d2d] dark:border-[#fdfbf7] rounded-full animate-spin" />
-                <GamepadIcon className="w-8 h-8 text-[#ff4d4d] animate-pulse" />
+                <div className="absolute inset-0 border-4 border-dashed border-indigo-500 rounded-full animate-spin" />
+                <Gamepad2 className="w-8 h-8 text-indigo-500 animate-pulse" />
               </div>
               <div className="space-y-1">
-                <h3 className="text-xl font-doodle font-bold text-[#2d2d2d] dark:text-[#fdfbf7] tracking-wide animate-bounce">
-                  Sharpening the pencils...
+                <h3 className="text-lg font-display font-bold text-slate-800 dark:text-white tracking-wide">
+                  Booting Game Cabinet...
                 </h3>
-                <p className="text-sm font-hand text-[#2d2d2d]/60 dark:text-[#fdfbf7]/60">
-                  Loading &quot;{game.title}&quot; safely into the canvas
+                <p className="text-xs text-slate-400 dark:text-slate-500 font-semibold uppercase tracking-wider">
+                  Loading &quot;{game.title}&quot; safely
                 </p>
               </div>
             </div>
           </div>
         )}
 
-        <div className="absolute inset-0 bg-[#fdfbf7]/10 dark:bg-black/10 flex items-center justify-center z-10 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-[inherit]">
-          <div className="flex items-center gap-2 text-sm font-hand font-bold text-[#2d2d2d] dark:text-[#fdfbf7] bg-white dark:bg-[#242429] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] px-4 py-2 shadow-sketch-sm"
-            style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-          >
-            <PlayIcon className="w-5 h-5" />
-            Click to interact with game
-          </div>
-        </div>
         <iframe
           ref={iframeRef}
           src={game.embedUrl}
-          className="absolute inset-0 w-full h-full rounded-[inherit] bg-white dark:bg-[#18181c]"
+          className="absolute inset-0 w-full h-full bg-white dark:bg-[#080b11]"
           allowFullScreen
           onLoad={() => setIsLoading(false)}
           sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
@@ -216,42 +280,32 @@ export default function GameDetailClient({ game, related }: GameDetailClientProp
       <div className="grid md:grid-cols-3 gap-6 mb-8">
         {/* Left Side: About & Features */}
         <div className="md:col-span-2 space-y-6">
-          <div
-            className="bg-white dark:bg-[#242429] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] shadow-sketch p-5 md:p-7"
-            style={{ borderRadius: "15px 255px 15px 225px / 225px 15px 255px 15px", transform: "rotate(0.3deg)" }}
-          >
-            <h2 className="text-lg md:text-xl font-doodle font-bold text-[#2d2d2d] dark:text-[#fdfbf7] mb-3 flex items-center gap-2">
-              <span className="w-6 h-6 bg-white dark:bg-[#242429] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] flex items-center justify-center text-[#ff4d4d]"
-                style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-              >
-                🎮
+          <div className="bg-white dark:bg-[#121824] border border-slate-200 dark:border-slate-800 p-6 md:p-8 rounded-2xl shadow-premium">
+            <h2 className="text-base md:text-lg font-display font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
+              <span className="w-7 h-7 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/30 flex items-center justify-center rounded-lg text-sm text-indigo-600 dark:text-indigo-400">
+                <Gamepad2 className="w-4 h-4" />
               </span>
-              Game Overview & Mechanics
+              <span>Game Overview & Mechanics</span>
             </h2>
-            <p className="text-sm md:text-base font-hand text-[#2d2d2d]/70 dark:text-[#fdfbf7]/70 leading-relaxed mb-4">
+            <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 leading-relaxed mb-4 font-medium">
               {game.description}
             </p>
-            <p className="text-sm md:text-base font-hand text-[#2d2d2d]/70 dark:text-[#fdfbf7]/70 leading-relaxed">
+            <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
               Step into the modern browser arena with {game.title}, an instant-play HTML5 game. As a highlight in the {game.category} segment on EraOGames, it merges classic gameplay design with robust browser responsiveness. Master the physics, aim for high score milestones, and discover why this title stands out in the current browser gaming era.
             </p>
           </div>
 
-          <div
-            className="bg-white dark:bg-[#242429] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] shadow-sketch p-5 md:p-7"
-            style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px", transform: "rotate(-0.3deg)" }}
-          >
-            <h2 className="text-lg md:text-xl font-doodle font-bold text-[#2d2d2d] dark:text-[#fdfbf7] mb-3 flex items-center gap-2">
-              <span className="w-6 h-6 bg-white dark:bg-[#242429] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] flex items-center justify-center text-[#2d5da1]"
-                style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-              >
-                ⭐
+          <div className="bg-white dark:bg-[#121824] border border-slate-200 dark:border-slate-800 p-6 md:p-8 rounded-2xl shadow-premium">
+            <h2 className="text-base md:text-lg font-display font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
+              <span className="w-7 h-7 bg-amber-50 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-900/30 flex items-center justify-center rounded-lg text-sm text-amber-600 dark:text-amber-400">
+                <Star className="w-4 h-4 fill-current" />
               </span>
-              Key Game Features
+              <span>Key Game Features</span>
             </h2>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm font-hand text-[#2d2d2d]/70 dark:text-[#fdfbf7]/70">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-sm text-slate-500 dark:text-slate-400 font-medium">
               {gameFeatures.map((feat, index) => (
                 <li key={index} className="flex items-start gap-2">
-                  <span className="text-[#ff4d4d] font-bold">✓</span>
+                  <Check className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                   <span>{feat}</span>
                 </li>
               ))}
@@ -261,42 +315,32 @@ export default function GameDetailClient({ game, related }: GameDetailClientProp
 
         {/* Right Side: How to Play & Controls */}
         <div className="space-y-6">
-          <div
-            className="bg-white dark:bg-[#242429] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] shadow-sketch p-5 md:p-7"
-            style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px", transform: "rotate(-0.5deg)" }}
-          >
-            <h2 className="text-lg md:text-xl font-doodle font-bold text-[#2d2d2d] dark:text-[#fdfbf7] mb-3 flex items-center gap-2">
-              <span className="w-6 h-6 bg-white dark:bg-[#242429] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] flex items-center justify-center text-[#2d5da1]"
-                style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-              >
-                📖
+          <div className="bg-white dark:bg-[#121824] border border-slate-200 dark:border-slate-800 p-6 md:p-8 rounded-2xl shadow-premium">
+            <h2 className="text-base md:text-lg font-display font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
+              <span className="w-7 h-7 bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/30 flex items-center justify-center rounded-lg text-sm text-blue-600 dark:text-blue-400">
+                <BookOpen className="w-4 h-4" />
               </span>
-              Instructions
+              <span>Instructions</span>
             </h2>
-            <p className="text-sm font-hand text-[#2d2d2d]/70 dark:text-[#fdfbf7]/70 leading-relaxed">
+            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
               {game.instructions}
             </p>
           </div>
 
-          <div
-            className="bg-white dark:bg-[#242429] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] shadow-sketch p-5 md:p-7"
-            style={{ borderRadius: "15px 255px 15px 225px / 225px 15px 255px 15px", transform: "rotate(0.5deg)" }}
-          >
-            <h2 className="text-lg md:text-xl font-doodle font-bold text-[#2d2d2d] dark:text-[#fdfbf7] mb-3 flex items-center gap-2">
-              <span className="w-6 h-6 bg-white dark:bg-[#242429] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] flex items-center justify-center text-[#ff4d4d]"
-                style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
-              >
-                ⌨️
+          <div className="bg-white dark:bg-[#121824] border border-slate-200 dark:border-slate-800 p-6 md:p-8 rounded-2xl shadow-premium">
+            <h2 className="text-base md:text-lg font-display font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
+              <span className="w-7 h-7 bg-red-50 dark:bg-red-950/40 border border-red-100 dark:border-red-900/30 flex items-center justify-center rounded-lg text-sm text-red-500 dark:text-red-400">
+                <Keyboard className="w-4 h-4" />
               </span>
-              Keyboard & Mouse Layout
+              <span>Input Control Layout</span>
             </h2>
             <div className="space-y-3">
               {controlKeys.map((item, idx) => (
-                <div key={idx} className="flex justify-between items-center border-b border-dashed border-[#e5e0d8] dark:border-[#44444a] pb-1.5 last:border-b-0 last:pb-0 text-sm font-hand">
-                  <span className="px-2 py-0.5 bg-white dark:bg-[#18181c] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] shadow-sketch-sm rounded text-xs font-bold text-[#2d2d2d] dark:text-[#fdfbf7] tracking-wider">
+                <div key={idx} className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800/80 pb-2 last:border-b-0 last:pb-0 text-sm font-medium">
+                  <span className="px-2 py-1 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-bold text-slate-700 dark:text-gray-200 tracking-wide">
                     {item.key}
                   </span>
-                  <span className="text-[#2d2d2d]/60 dark:text-[#fdfbf7]/60 text-right">
+                  <span className="text-slate-400 dark:text-slate-400 text-right text-xs">
                     {item.action}
                   </span>
                 </div>
@@ -307,29 +351,28 @@ export default function GameDetailClient({ game, related }: GameDetailClientProp
       </div>
 
       {/* Accordion FAQ Area */}
-      <section
-        className="bg-white dark:bg-[#242429] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] shadow-sketch p-5 md:p-7 mb-10"
-        style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px", transform: "rotate(0.1deg)" }}
-      >
-        <h2 className="text-xl font-doodle font-bold text-[#2d2d2d] dark:text-[#fdfbf7] mb-5 flex items-center gap-2 border-b-2 border-dashed border-[#e5e0d8] dark:border-[#44444a] pb-2">
-          ❓ Frequently Asked Questions (FAQ)
+      <section className="bg-white dark:bg-[#121824] border border-slate-200 dark:border-slate-800 p-6 md:p-8 rounded-2xl shadow-premium mb-10">
+        <h2 className="text-base md:text-lg font-display font-bold text-slate-800 dark:text-white mb-5 pb-3 border-b border-slate-100 dark:border-slate-800/80 flex items-center gap-2">
+          <HelpCircle className="w-5 h-5 text-indigo-500" />
+          <span>Frequently Asked Questions (FAQ)</span>
         </h2>
-        <div className="space-y-4">
+        <div className="space-y-3">
           {faqs.map((faq, i) => {
             const isOpen = activeFaq === i;
             return (
-              <div key={i} className="border-2 border-[#2d2d2d] dark:border-[#fdfbf7] rounded-lg overflow-hidden"
-                style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+              <div key={i} className="border border-slate-200 dark:border-slate-800/80 rounded-xl overflow-hidden shadow-sm"
               >
                 <button
                   onClick={() => setActiveFaq(isOpen ? null : i)}
-                  className="w-full flex items-center justify-between text-left p-4 bg-white dark:bg-[#242429] hover:bg-[#ff4d4d]/5 dark:hover:bg-[#ff6b6b]/5 text-sm md:text-base font-hand font-bold text-[#2d2d2d] dark:text-[#fdfbf7] transition-all"
+                  className="w-full flex items-center justify-between text-left p-4 bg-white dark:bg-[#121824] hover:bg-violet-500/5 dark:hover:bg-violet-500/5 text-sm md:text-base font-semibold text-slate-800 dark:text-slate-100 transition-all duration-200"
+                  aria-expanded={isOpen}
+                  aria-label={`Frequently Asked Question: ${faq.q}. Click to expand answer.`}
                 >
                   <span>{faq.q}</span>
-                  <span className="text-lg font-bold text-[#ff4d4d]">{isOpen ? "▲" : "▼"}</span>
+                  <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
                 </button>
                 {isOpen && (
-                  <div className="p-4 border-t-2 border-dashed border-[#2d2d2d] dark:border-[#fdfbf7] bg-[#fdfbf7] dark:bg-[#18181c] text-xs md:text-sm font-hand text-[#2d2d2d]/70 dark:text-[#fdfbf7]/70 leading-relaxed transition-all">
+                  <div className="p-4 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50 dark:bg-[#0d121c] text-xs md:text-sm text-slate-500 dark:text-slate-400 leading-relaxed transition-all">
                     {faq.a}
                   </div>
                 )}
@@ -339,16 +382,17 @@ export default function GameDetailClient({ game, related }: GameDetailClientProp
         </div>
       </section>
 
+      {/* More Games List Grid */}
       {related.length > 0 && (
         <section className="pb-8">
           <div className="doodle-separator" />
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="doodle-section-title text-xl md:text-2xl">
-              <GamepadIcon className="w-5 h-5" />
-              More {game.category} Games
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="doodle-section-title">
+              <Gamepad2 className="w-5 h-5 text-indigo-500" />
+              <span>More {game.category} Games</span>
             </h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {related.map((g) => (
               <GameCard key={g.id} game={g} />
             ))}

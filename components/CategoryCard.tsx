@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ActionIcon, RacingIcon, PuzzleIcon, AdventureIcon, MultiplayerIcon, SportsIcon, ArcadeIcon } from "./Icons";
+import { Swords, Car, Brain, Compass, Users, Trophy, Gamepad } from "lucide-react";
 
 interface CategoryCardProps {
   name: string;
@@ -7,61 +7,57 @@ interface CategoryCardProps {
   index?: number;
 }
 
-const rotations = ["-1deg", "1.5deg", "-0.5deg", "0.5deg", "-1.5deg", "1deg", "-0.8deg"];
-
-const iconMap: Record<string, React.FC<{ className?: string }>> = {
-  Action: ActionIcon,
-  Racing: RacingIcon,
-  Puzzle: PuzzleIcon,
-  Adventure: AdventureIcon,
-  Multiplayer: MultiplayerIcon,
-  Sports: SportsIcon,
-  Arcade: ArcadeIcon,
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Action: Swords,
+  Racing: Car,
+  Puzzle: Brain,
+  Adventure: Compass,
+  Multiplayer: Users,
+  Sports: Trophy,
+  Arcade: Gamepad,
 };
 
 const colorMap: Record<string, string> = {
-  Action: "text-[#ff4d4d] dark:text-[#ff6b6b]",
-  Racing: "text-[#2d2d2d] dark:text-[#fdfbf7]",
-  Puzzle: "text-[#2d5da1] dark:text-[#4dabf7]",
-  Adventure: "text-[#2d2d2d] dark:text-[#fdfbf7]",
-  Multiplayer: "text-[#ff4d4d] dark:text-[#ff6b6b]",
-  Sports: "text-[#2d5da1] dark:text-[#4dabf7]",
-  Arcade: "text-[#2d2d2d] dark:text-[#fdfbf7]",
+  Action: "text-red-500 dark:text-red-400",
+  Racing: "text-orange-500 dark:text-orange-400",
+  Puzzle: "text-blue-500 dark:text-blue-400",
+  Adventure: "text-emerald-500 dark:text-emerald-400",
+  Multiplayer: "text-violet-500 dark:text-violet-400",
+  Sports: "text-indigo-500 dark:text-indigo-400",
+  Arcade: "text-pink-500 dark:text-pink-400",
 };
 
 const bgMap: Record<string, string> = {
-  Action: "bg-[#ff4d4d]/10 dark:bg-[#ff6b6b]/10",
-  Racing: "bg-[#2d2d2d]/5 dark:bg-[#fdfbf7]/5",
-  Puzzle: "bg-[#2d5da1]/10 dark:bg-[#4dabf7]/10",
-  Adventure: "bg-[#2d2d2d]/5 dark:bg-[#fdfbf7]/5",
-  Multiplayer: "bg-[#ff4d4d]/10 dark:bg-[#ff6b6b]/10",
-  Sports: "bg-[#2d5da1]/10 dark:bg-[#4dabf7]/10",
-  Arcade: "bg-[#2d2d2d]/5 dark:bg-[#fdfbf7]/5",
+  Action: "bg-red-500/10 dark:bg-red-500/5 border-red-500/20 dark:border-red-500/10",
+  Racing: "bg-orange-500/10 dark:bg-orange-500/5 border-orange-500/20 dark:border-orange-500/10",
+  Puzzle: "bg-blue-500/10 dark:bg-blue-500/5 border-blue-500/20 dark:border-blue-500/10",
+  Adventure: "bg-emerald-500/10 dark:bg-emerald-500/5 border-emerald-500/20 dark:border-emerald-500/10",
+  Multiplayer: "bg-violet-500/10 dark:bg-violet-500/5 border-violet-500/20 dark:border-violet-500/10",
+  Sports: "bg-indigo-500/10 dark:bg-indigo-500/5 border-indigo-500/20 dark:border-indigo-500/10",
+  Arcade: "bg-pink-500/10 dark:bg-pink-500/5 border-pink-500/20 dark:border-pink-500/10",
 };
 
 export default function CategoryCard({ name, count, index = 0 }: CategoryCardProps) {
   const Icon = iconMap[name];
-  const colorClass = colorMap[name] || "text-[#2d2d2d] dark:text-[#fdfbf7]";
-  const bgClass = bgMap[name] || "bg-[#2d2d2d]/5 dark:bg-[#fdfbf7]/5";
-  const rot = rotations[index % rotations.length];
+  const colorClass = colorMap[name] || "text-indigo-500 dark:text-indigo-400";
+  const bgClass = bgMap[name] || "bg-indigo-500/10 dark:bg-indigo-500/5 border-indigo-500/20 dark:border-indigo-500/10";
 
   return (
     <Link
       href={`/category/${name.toLowerCase()}`}
-      className="sketch-card block p-5 md:p-6 text-center h-full hover:-translate-y-1.5 transition-all duration-200"
-      style={{ transform: `rotate(${rot})` }}
+      className="sketch-card block p-5 md:p-6 text-center h-full hover:-translate-y-1.5 transition-all duration-300 group"
+      aria-label={`Browse free games in category: ${name}. There are ${count} games available`}
     >
-      <div className="flex items-center justify-center mb-3">
-        <div className={`w-12 h-12 ${bgClass} border-2 border-[#2d2d2d] dark:border-[#fdfbf7] flex items-center justify-center ${colorClass} transition-all duration-200 group-hover:scale-110`}
-          style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+      <div className="flex items-center justify-center mb-3.5">
+        <div className={`w-12 h-12 ${bgClass} border flex items-center justify-center ${colorClass} rounded-2xl transition-all duration-300 group-hover:scale-110 group-hover:shadow-glow-sm`}
         >
           {Icon && <Icon className="w-6 h-6" />}
         </div>
       </div>
-      <h3 className="font-doodle font-bold text-[#2d2d2d] dark:text-[#fdfbf7] text-sm md:text-base">
+      <h3 className="font-display font-bold text-slate-800 dark:text-slate-100 text-sm md:text-base group-hover:text-indigo-600 dark:group-hover:text-violet-400 transition-colors">
         {name}
       </h3>
-      <p className="text-xs md:text-sm font-hand text-[#2d2d2d]/50 dark:text-[#fdfbf7]/50 mt-1.5">{count} games</p>
+      <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 font-medium">{count} games</p>
     </Link>
   );
 }

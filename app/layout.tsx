@@ -45,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#fdfbf7] dark:bg-[#18181c] transition-colors duration-200" suppressHydrationWarning>
+      <body className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#080b11] text-[#0f172a] dark:text-[#f3f4f6] transition-colors duration-300" suppressHydrationWarning>
         <Navbar />
         <main className="flex-1 pt-16 md:pt-20">{children}</main>
         <Footer />

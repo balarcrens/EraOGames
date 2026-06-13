@@ -20,6 +20,7 @@ export default function FullscreenButton({ iframeRef }: { iframeRef: React.RefOb
     <button
       onClick={handleFullscreen}
       className="sketch-btn text-xs md:text-sm px-5 py-2.5 group"
+      aria-label="Expand game frame to fullscreen mode"
     >
       <FullscreenIcon className="w-4 h-4" />
       <span className="hidden sm:inline">Fullscreen</span>

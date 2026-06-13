@@ -28,13 +28,13 @@ const catPageIconMap: Record<GameCategory, React.FC<{ className?: string }>> = {
 };
 
 const catPageColorMap: Record<string, string> = {
-  Action: "text-[#ff4d4d] dark:text-[#ff6b6b]",
-  Racing: "text-[#2d2d2d] dark:text-[#fdfbf7]",
-  Puzzle: "text-[#2d5da1] dark:text-[#4dabf7]",
-  Adventure: "text-[#2d2d2d] dark:text-[#fdfbf7]",
-  Multiplayer: "text-[#ff4d4d] dark:text-[#ff6b6b]",
-  Sports: "text-[#2d5da1] dark:text-[#4dabf7]",
-  Arcade: "text-[#2d2d2d] dark:text-[#fdfbf7]",
+  Action: "text-red-500 dark:text-red-400",
+  Racing: "text-orange-500 dark:text-orange-400",
+  Puzzle: "text-blue-500 dark:text-blue-400",
+  Adventure: "text-emerald-500 dark:text-emerald-400",
+  Multiplayer: "text-violet-500 dark:text-violet-400",
+  Sports: "text-indigo-500 dark:text-indigo-400",
+  Arcade: "text-pink-500 dark:text-pink-400",
 };
 
 export function generateStaticParams() {
@@ -64,52 +64,51 @@ export default function CategoryPage({ params }: { params: { name: string } }) {
 
   const currentName = isAll ? "All Games" : category!.name;
   const Icon = isAll ? null : catPageIconMap[currentName as GameCategory];
-  const colorClass = isAll ? "text-[#2d2d2d] dark:text-[#fdfbf7]" : catPageColorMap[currentName] || "text-[#2d2d2d] dark:text-[#fdfbf7]";
+  const colorClass = isAll ? "text-slate-800 dark:text-white" : catPageColorMap[currentName] || "text-slate-800 dark:text-white";
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 font-hand">
-      <div className="flex items-center gap-1.5 text-xs md:text-sm text-[#2d2d2d]/50 dark:text-[#fdfbf7]/50 mb-6">
-        <Link href="/" className="flex items-center gap-1 hover:text-[#ff4d4d] transition-colors">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 text-slate-800 dark:text-gray-100 font-sans">
+      {/* Breadcrumbs */}
+      <div className="flex items-center gap-2 text-xs md:text-sm text-slate-400 dark:text-slate-500 mb-6 font-medium">
+        <Link href="/" className="flex items-center gap-1 hover:text-indigo-600 transition-colors">
           <HomeIcon className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Home</span>
         </Link>
-        <ChevronRightIcon className="w-3 h-3" />
-        <Link href="/games" className="flex items-center gap-1 hover:text-[#ff4d4d] transition-colors">
+        <ChevronRightIcon className="w-3 h-3 text-slate-300 dark:text-slate-700" />
+        <Link href="/games" className="flex items-center gap-1 hover:text-indigo-600 transition-colors">
           <GridIcon className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Games</span>
         </Link>
-        <ChevronRightIcon className="w-3 h-3" />
-        <span className="text-[#2d2d2d]/60 dark:text-[#fdfbf7]/60">{currentName}</span>
+        <ChevronRightIcon className="w-3 h-3 text-slate-300 dark:text-slate-700" />
+        <span className="text-slate-500 dark:text-slate-400 font-semibold">{currentName}</span>
       </div>
 
       <div className="relative mb-8">
-        <div className="flex items-center gap-3 mb-2">
+        <div className="flex items-center gap-3.5 mb-2">
           {!isAll && Icon && (
-            <div className={`w-10 h-10 bg-white dark:bg-[#242429] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] shadow-sketch-sm flex items-center justify-center ${colorClass}`}
-              style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+            <div className="w-11 h-11 bg-white dark:bg-[#121824] border border-slate-200 dark:border-slate-800/80 shadow-sm flex items-center justify-center rounded-2xl"
             >
-              <Icon className="w-5 h-5" />
+              <Icon className={`w-5 h-5 ${colorClass}`} />
             </div>
           )}
           {isAll && (
-            <div className="w-10 h-10 bg-white dark:bg-[#242429] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] shadow-sketch-sm flex items-center justify-center"
-              style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+            <div className="w-11 h-11 bg-white dark:bg-[#121824] border border-slate-200 dark:border-slate-800/80 shadow-sm flex items-center justify-center rounded-2xl"
             >
-              <GamepadIcon className="w-5 h-5 text-[#2d2d2d] dark:text-[#fdfbf7]" />
+              <GamepadIcon className="w-5 h-5 text-indigo-500" />
             </div>
           )}
           <div>
-            <h1 className="text-3xl md:text-4xl font-doodle font-bold text-[#2d2d2d] dark:text-[#fdfbf7] tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-display font-bold text-slate-800 dark:text-white tracking-wide">
               {isAll ? "All Games" : `${currentName} Games`}
             </h1>
-            <p className="font-hand text-[#2d2d2d]/50 dark:text-[#fdfbf7]/50 text-sm">
-              <span className="text-[#2d2d2d] dark:text-[#fdfbf7] font-bold">{catGames.length}</span> game{catGames.length !== 1 ? "s" : ""} available
+            <p className="text-slate-400 dark:text-slate-500 text-xs font-semibold uppercase tracking-wider mt-0.5">
+              <span className="text-slate-800 dark:text-white font-bold">{catGames.length}</span> games active
             </p>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-8">
+      <div className="flex flex-wrap gap-2.5 mb-8">
         <Link
           href="/category/all"
           className={isAll ? "chip-active" : "chip-default"}
@@ -135,14 +134,13 @@ export default function CategoryPage({ params }: { params: { name: string } }) {
       {catGames.length > 0 ? (
         <GameGrid games={catGames} />
       ) : (
-        <div className="text-center py-24">
-          <div className="w-16 h-16 bg-white dark:bg-[#242429] border-2 border-[#2d2d2d] dark:border-[#fdfbf7] shadow-sketch-sm flex items-center justify-center mx-auto mb-4"
-            style={{ borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px" }}
+        <div className="text-center py-20 bg-white dark:bg-[#121824] border border-slate-200 dark:border-slate-800 rounded-2xl">
+          <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800/80 flex items-center justify-center mx-auto mb-4 rounded-full"
           >
-            <GamepadIcon className="w-8 h-8 text-[#2d2d2d]/30 dark:text-[#fdfbf7]/30" />
+            <GamepadIcon className="w-8 h-8 text-slate-300 dark:text-slate-700" />
           </div>
-          <h2 className="text-xl font-doodle font-bold text-[#2d2d2d] dark:text-[#fdfbf7] mb-2">No games found</h2>
-          <p className="font-hand text-[#2d2d2d]/50 dark:text-[#fdfbf7]/50">Check back soon for new games in this category.</p>
+          <h2 className="text-lg font-display font-bold text-slate-800 dark:text-white mb-1">No games found</h2>
+          <p className="text-sm text-slate-400 dark:text-slate-500">Check back soon for new games in this category.</p>
         </div>
       )}
     </div>
