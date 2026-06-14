@@ -55,6 +55,25 @@ export default function GameDetailClient({ game, related }: GameDetailClientProp
   const [isTheaterMode, setIsTheaterMode] = useState(false);
   const [iframeSizeOffset, setIframeSizeOffset] = useState(false);
 
+  const [referrerUrl, setReferrerUrl] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setReferrerUrl(window.location.origin);
+    }
+  }, []);
+
+  const embedUrlWithReferrer = useMemo(() => {
+    const origin = referrerUrl || (typeof window !== "undefined" ? window.location.origin : "https://eraogames.vercel.app");
+    try {
+      const url = new URL(game.embedUrl);
+      url.searchParams.set("gd_sdk_referrer_url", origin);
+      return url.toString();
+    } catch (_) {
+      return game.embedUrl;
+    }
+  }, [game.embedUrl, referrerUrl]);
+
   // Derive likes and dislikes from plays & rating
   const initialLikes = useMemo(() => {
     const reviews = Math.max(10, Math.round(game.plays * 0.03));
@@ -164,7 +183,7 @@ export default function GameDetailClient({ game, related }: GameDetailClientProp
   const handleReload = () => {
     if (iframeRef.current) {
       setIsLoading(true);
-      iframeRef.current.src = game.embedUrl;
+      iframeRef.current.src = embedUrlWithReferrer;
     }
   };
 
@@ -574,7 +593,7 @@ export default function GameDetailClient({ game, related }: GameDetailClientProp
           ? "fixed inset-0 z-50 rounded-none w-screen h-screen m-0"
           : isTheaterMode
             ? "w-full h-[80vh] max-h-[90vh] md:h-[85vh] lg:h-[90vh]"
-            : "w-full aspect-[16/9] min-h-[220px] xs:min-h-[280px] sm:min-h-[400px] md:min-h-[500px] lg:min-h-[600px] xl:min-h-[700px]"
+            : "w-full h-[70vh] min-h-[460px] max-h-[600px] sm:h-auto sm:aspect-[16/9] md:min-h-[500px] lg:min-h-[600px] xl:min-h-[700px]"
           }`}
       >
         {isLoading && (
@@ -608,11 +627,11 @@ export default function GameDetailClient({ game, related }: GameDetailClientProp
 
         <iframe
           ref={iframeRef}
-          src={game.embedUrl}
+          src={embedUrlWithReferrer}
           className={`absolute inset-0 w-full h-full bg-white dark:bg-[#080b11] transition-transform duration-100 ${iframeSizeOffset ? "scale-[0.999]" : "scale-100"}`}
           allowFullScreen
           onLoad={() => setIsLoading(false)}
-          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock"
+          allow="autoplay; fullscreen; pointer-lock"
           title={game.title}
         />
       </div>
