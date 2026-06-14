@@ -20,7 +20,8 @@ import {
   Gamepad,
   Filter,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  ThumbsUp
 } from "lucide-react";
 
 interface GamesClientProps {
@@ -53,6 +54,16 @@ export default function GamesClient({ games, categories }: GamesClientProps) {
 
   // Pagination page state
   const [currentPage, setCurrentPage] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Sync bookmarks list from LocalStorage
   const [favoritesList, setFavoritesList] = useState<string[]>([]);
@@ -164,6 +175,53 @@ export default function GamesClient({ games, categories }: GamesClientProps) {
 
   const totalPages = Math.ceil(filteredAndSortedGames.length / ITEMS_PER_PAGE);
 
+  const paginationRange = useMemo(() => {
+    const range: (number | string)[] = [];
+    if (totalPages <= 1) return range;
+
+    const siblingCount = isMobile ? 1 : 2;
+    const totalPageNumbers = siblingCount * 2 + 5; // First + Last + Active + Siblings + Dots
+
+    if (totalPages <= totalPageNumbers) {
+      for (let i = 1; i <= totalPages; i++) {
+        range.push(i);
+      }
+      return range;
+    }
+
+    const leftSiblingIndex = Math.max(currentPage - siblingCount, 2);
+    const rightSiblingIndex = Math.min(currentPage + siblingCount, totalPages - 1);
+
+    const shouldShowLeftDots = leftSiblingIndex > 2;
+    const shouldShowRightDots = rightSiblingIndex < totalPages - 1;
+
+    range.push(1);
+
+    if (shouldShowLeftDots) {
+      range.push("dots-left");
+    } else {
+      for (let i = 2; i < leftSiblingIndex; i++) {
+        range.push(i);
+      }
+    }
+
+    for (let i = leftSiblingIndex; i <= rightSiblingIndex; i++) {
+      range.push(i);
+    }
+
+    if (shouldShowRightDots) {
+      range.push("dots-right");
+    } else {
+      for (let i = rightSiblingIndex + 1; i < totalPages; i++) {
+        range.push(i);
+      }
+    }
+
+    range.push(totalPages);
+
+    return range;
+  }, [totalPages, currentPage, isMobile]);
+
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
     // Smooth scroll page back to explorer title header
@@ -263,7 +321,7 @@ export default function GamesClient({ games, categories }: GamesClientProps) {
               aria-label="Sort list sort order selection"
             >
               <option value="popular">Most Played</option>
-              <option value="rating">Top Rated</option>
+              <option value="rating">Highest Liked</option>
               <option value="alpha">Alphabetical (A-Z)</option>
             </select>
             <div className="absolute pointer-events-none right-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-xs">
@@ -272,15 +330,15 @@ export default function GamesClient({ games, categories }: GamesClientProps) {
           </div>
         </div>
 
-        {/* Min Rating Slider */}
+        {/* Min Likes Slider */}
         <div className="space-y-1.5">
           <div className="flex justify-between items-center">
             <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-              Min Rating
+              Min Likes
             </label>
-            <span className="text-xs font-bold text-amber-500 flex items-center gap-0.5">
-              <Star className="w-3.5 h-3.5 fill-current" />
-              {minRating > 0 ? `${minRating.toFixed(1)}+` : "Any"}
+            <span className="text-xs font-bold text-emerald-500 flex items-center gap-0.5">
+              <ThumbsUp className="w-3 h-3 fill-current" />
+              {minRating > 0 ? `${Math.round(minRating * 20)}%+` : "Any"}
             </span>
           </div>
           <input
@@ -290,13 +348,13 @@ export default function GamesClient({ games, categories }: GamesClientProps) {
             step="0.1"
             value={minRating}
             onChange={(e) => setMinRating(parseFloat(e.target.value))}
-            className="w-full accent-violet-600 dark:accent-violet-500 cursor-pointer bg-slate-100 dark:bg-slate-800 h-1.5 rounded-lg"
+            className="w-full accent-emerald-500 dark:accent-emerald-600 cursor-pointer bg-slate-100 dark:bg-slate-800 h-1.5 rounded-lg"
             aria-label="Minimum rating threshold slider filter"
           />
           <div className="flex justify-between text-[10px] font-medium text-slate-400 dark:text-slate-500">
-            <span>0.0</span>
-            <span>2.5</span>
-            <span>5.0</span>
+            <span>0%</span>
+            <span>50%</span>
+            <span>100%</span>
           </div>
         </div>
 
@@ -473,7 +531,7 @@ export default function GamesClient({ games, categories }: GamesClientProps) {
                 aria-label="Remove minimum rating filter"
                 role="button"
               >
-                Rating: &gt;={minRating.toFixed(1)} <X className="w-3 h-3 text-red-500" />
+                Likes: &gt;={Math.round(minRating * 20)}% <X className="w-3 h-3 text-red-500" />
               </span>
             )}
           </div>
@@ -494,20 +552,30 @@ export default function GamesClient({ games, categories }: GamesClientProps) {
                 <button
                   disabled={currentPage === 1}
                   onClick={() => handlePageChange(currentPage - 1)}
-                  className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800/60 text-slate-600 dark:text-slate-400 transition-colors"
+                  className="w-8 h-8 md:w-10 md:h-10 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800/60 text-slate-600 dark:text-slate-400 transition-colors"
                   aria-label="Go to previous games page"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
 
-                {Array.from({ length: totalPages }).map((_, idx) => {
-                  const pageNum = idx + 1;
+                {paginationRange.map((pageNum, idx) => {
+                  if (typeof pageNum === "string") {
+                    return (
+                      <span
+                        key={`dots-${idx}`}
+                        className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-slate-400 dark:text-slate-600 font-bold select-none text-xs md:text-sm"
+                      >
+                        ...
+                      </span>
+                    );
+                  }
+
                   const isActive = pageNum === currentPage;
                   return (
                     <button
                       key={pageNum}
                       onClick={() => handlePageChange(pageNum)}
-                      className={`w-10 h-10 rounded-xl font-bold text-sm border flex items-center justify-center transition-all ${
+                      className={`w-8 h-8 md:w-10 md:h-10 rounded-xl font-bold text-xs md:text-sm border flex items-center justify-center transition-all ${
                         isActive
                           ? "bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-500/20"
                           : "bg-white dark:bg-[#121824] border-slate-200 dark:border-slate-800 hover:border-violet-500 text-slate-600 dark:text-slate-400"
@@ -523,7 +591,7 @@ export default function GamesClient({ games, categories }: GamesClientProps) {
                 <button
                   disabled={currentPage === totalPages}
                   onClick={() => handlePageChange(currentPage + 1)}
-                  className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800/60 text-slate-600 dark:text-slate-400 transition-colors"
+                  className="w-8 h-8 md:w-10 md:h-10 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800/60 text-slate-600 dark:text-slate-400 transition-colors"
                   aria-label="Go to next games page"
                 >
                   <ChevronRight className="w-4 h-4" />

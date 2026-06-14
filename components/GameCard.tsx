@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import type { Game } from "@/types";
-import { Star, Play, Eye } from "lucide-react";
+import { Star, Play, Eye, ThumbsUp } from "lucide-react";
 
 interface GameCardProps {
   game: Game;
@@ -58,7 +58,7 @@ export default function GameCard({ game, index = 0 }: GameCardProps) {
     <Link
       href={`/game/${game.slug}`}
       className={`sketch-card block group ${marginTop} overflow-hidden`}
-      aria-label={`Play free game: ${game.title}. Rating: ${game.rating.toFixed(1)} out of 5 stars`}
+      aria-label={`Play free game: ${game.title}. Like Ratio: ${Math.round((game.rating / 5) * 100)}%`}
     >
       {/* Thumbnail area */}
       <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-[#0b0e14]">
@@ -84,9 +84,9 @@ export default function GameCard({ game, index = 0 }: GameCardProps) {
         </div>
 
         {/* Rating Badge */}
-        <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-1 bg-white/95 dark:bg-[#0e1320]/95 border border-slate-200 dark:border-slate-800 shadow-sm text-[9px] text-slate-800 dark:text-gray-200 font-bold rounded-lg">
-          <Star className="w-3 h-3 text-amber-500 fill-current" />
-          <span>{game.rating.toFixed(1)}</span>
+        <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500 dark:bg-emerald-600 text-white shadow-md text-[10px] font-bold rounded-lg tracking-wide border border-emerald-400/20">
+          <ThumbsUp className="w-3 h-3 fill-current shrink-0" />
+          <span>{Math.round((game.rating / 5) * 100)}%</span>
         </div>
 
         {/* Interactive Star Favorite Button overlay */}

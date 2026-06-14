@@ -73,7 +73,7 @@ export default function HeroSection() {
             { value: "10K+", label: "Free Games", bg: "hover:border-indigo-500/50" },
             { value: "500+", label: "Categories", bg: "hover:border-fuchsia-500/50" },
             { value: "2M+", label: "Active Players", bg: "hover:border-violet-500/50" },
-            { value: "4.8/5", label: "Avg Rating", bg: "hover:border-amber-500/50" },
+            { value: "95%+", label: "Like Ratio", bg: "hover:border-emerald-500/50" },
           ].map((stat) => (
             <div
               key={stat.label}
