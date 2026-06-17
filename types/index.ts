@@ -9,6 +9,9 @@ export interface Game {
   instructions: string;
   rating: number;
   plays: number;
+  width?: string;
+  height?: string;
+  tags?: string[];
 }
 
 export type GameCategory =
