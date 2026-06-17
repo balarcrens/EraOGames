@@ -15,7 +15,7 @@ export default function FavoritesShelf() {
         const favSlugs: string[] = JSON.parse(localStorage.getItem("eraogames_favorites") || "[]");
         const list = games.filter((g) => favSlugs.includes(g.slug));
         setFavoriteGames(list);
-      } catch (_) {}
+      } catch (_) { }
     };
 
     syncFavs();
@@ -26,7 +26,7 @@ export default function FavoritesShelf() {
   if (favoriteGames.length === 0) return null;
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-2">
+    <section className="w-full mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-2">
       <div className="flex items-center justify-between mb-8">
         <h2 className="doodle-section-title">
           <Star className="w-6 h-6 text-amber-500 fill-current" />

@@ -21,7 +21,7 @@ function GamesExplorerLoader() {
 
 export default function GamesPage() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
+    <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
       <div className="flex items-center gap-3.5 mb-8">
         <div className="w-12 h-12 bg-white dark:bg-[#121824] border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-center text-indigo-600 dark:text-violet-400 rounded-xl"
         >

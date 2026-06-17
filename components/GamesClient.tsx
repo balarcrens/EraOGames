@@ -27,6 +27,7 @@ import {
 interface GamesClientProps {
   games: Game[];
   categories: { name: GameCategory }[];
+  hideFilters?: boolean;
 }
 
 const catIconMap: Record<GameCategory, React.ComponentType<{ className?: string }>> = {
@@ -39,9 +40,9 @@ const catIconMap: Record<GameCategory, React.ComponentType<{ className?: string 
   Arcade: Gamepad,
 };
 
-const ITEMS_PER_PAGE = 12;
+const ITEMS_PER_PAGE = 48;
 
-export default function GamesClient({ games, categories }: GamesClientProps) {
+export default function GamesClient({ games, categories, hideFilters = false }: GamesClientProps) {
   const searchParams = useSearchParams();
 
   // State filters
@@ -445,16 +446,18 @@ export default function GamesClient({ games, categories }: GamesClientProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <div className={hideFilters ? "w-full" : "grid grid-cols-1 lg:grid-cols-4 gap-8"}>
       {/* Filters Sidebar - Desktop Only */}
-      <div className="hidden lg:block lg:col-span-1">
-        <div className="bg-white dark:bg-[#121824] border border-slate-200 dark:border-slate-800 p-5 md:p-6 rounded-2xl shadow-premium sticky top-24">
-          {renderFilterContent(false)}
+      {!hideFilters && (
+        <div className="hidden lg:block lg:col-span-1">
+          <div className="bg-white dark:bg-[#121824] border border-slate-200 dark:border-slate-800 p-5 md:p-6 rounded-2xl shadow-premium sticky top-24">
+            {renderFilterContent(false)}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Mobile Filters Drawer */}
-      {mobileFilterOpen && (
+      {!hideFilters && mobileFilterOpen && (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true">
           {/* Backdrop */}
           <div
@@ -469,26 +472,28 @@ export default function GamesClient({ games, categories }: GamesClientProps) {
       )}
 
       {/* Games Grid Results */}
-      <div className="lg:col-span-3 space-y-6">
-        <div id="game-explorer-header" className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800 scroll-mt-24">
-          <h1 className="text-lg md:text-xl font-display font-bold text-slate-800 dark:text-white flex items-center gap-2">
-            <Compass className="w-5 h-5 text-indigo-500 animate-spin-slow" />
-            <span>Game Explorer</span>
-          </h1>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setMobileFilterOpen(true)}
-              className="lg:hidden flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-500/20 hover:scale-[1.02]"
-              aria-label="Open filter options menu"
-            >
-              <Filter className="w-3.5 h-3.5" />
-              <span>Filter</span>
-            </button>
-            <p className="text-xs text-slate-400 dark:text-slate-500 font-semibold uppercase tracking-wider">
-              Found <span className="text-slate-800 dark:text-white font-bold">{totalFilteredCount}</span> games
-            </p>
+      <div className={hideFilters ? "w-full space-y-6" : "lg:col-span-3 space-y-6"}>
+        {!hideFilters && (
+          <div id="game-explorer-header" className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800 scroll-mt-24">
+            <h1 className="text-lg md:text-xl font-display font-bold text-slate-800 dark:text-white flex items-center gap-2">
+              <Compass className="w-5 h-5 text-indigo-500 animate-spin-slow" />
+              <span>Game Explorer</span>
+            </h1>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setMobileFilterOpen(true)}
+                className="lg:hidden flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-500/20 hover:scale-[1.02]"
+                aria-label="Open filter options menu"
+              >
+                <Filter className="w-3.5 h-3.5" />
+                <span>Filter</span>
+              </button>
+              <p className="text-xs text-slate-400 dark:text-slate-500 font-semibold uppercase tracking-wider">
+                Found <span className="text-slate-800 dark:text-white font-bold">{totalFilteredCount}</span> games
+              </p>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Filters Summary Badges */}
         {(search || category !== "all" || minRating > 0 || favoritesOnly) && (
@@ -540,7 +545,7 @@ export default function GamesClient({ games, categories }: GamesClientProps) {
         {/* Games Display */}
         {filteredAndSortedGames.length > 0 ? (
           <div className="space-y-8">
-            <GameGrid games={paginatedGames} columns={3} />
+            <GameGrid games={paginatedGames} />
             
             {/* Centered Pagination Control board with aria attributes */}
             {totalPages > 1 && (

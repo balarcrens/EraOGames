@@ -67,7 +67,7 @@ export default function CategoryPage({ params }: { params: { name: string } }) {
   const colorClass = isAll ? "text-slate-800 dark:text-white" : catPageColorMap[currentName] || "text-slate-800 dark:text-white";
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 text-slate-800 dark:text-gray-100 font-sans">
+    <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 text-slate-800 dark:text-gray-100 font-sans">
       {/* Breadcrumbs */}
       <div className="flex items-center gap-2 text-xs md:text-sm text-slate-400 dark:text-slate-500 mb-6 font-medium">
         <Link href="/" className="flex items-center gap-1 hover:text-indigo-600 transition-colors">

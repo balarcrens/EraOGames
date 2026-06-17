@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import type { Game } from "@/types";
-import GameCard from "@/components/GameCard";
+import GameGrid from "@/components/GameGrid";
 import {
   Home,
   ChevronRight,
@@ -28,7 +28,8 @@ import {
   RotateCcw,
   Tv,
   Laptop,
-  Smartphone
+  Smartphone,
+  Sparkles
 } from "lucide-react";
 import type { GameCategory } from "@/types";
 
@@ -45,9 +46,10 @@ const detailIconMap: Record<GameCategory, React.ComponentType<{ className?: stri
 interface GameDetailClientProps {
   game: Game;
   related: readonly Game[];
+  suggested?: readonly Game[];
 }
 
-export default function GameDetailClient({ game, related }: GameDetailClientProps) {
+export default function GameDetailClient({ game, related, suggested = [] }: GameDetailClientProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -61,6 +63,34 @@ export default function GameDetailClient({ game, related }: GameDetailClientProp
     if (typeof window !== "undefined") {
       setReferrerUrl(window.location.origin);
     }
+  }, []);
+
+  // Handle focus-based scroll lock for the iframe game cabinet
+  useEffect(() => {
+    const handleScrollLock = () => {
+      // If the iframe is focused, lock parent page scrolling
+      if (document.activeElement === iframeRef.current) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "";
+      }
+    };
+
+    // Listen to focus/blur/click actions to track active iframe
+    window.addEventListener("blur", handleScrollLock);
+    window.addEventListener("focus", handleScrollLock);
+    document.addEventListener("click", handleScrollLock);
+
+    // Periodic check to capture clicks inside the cross-origin iframe
+    const checkInterval = setInterval(handleScrollLock, 400);
+
+    return () => {
+      window.removeEventListener("blur", handleScrollLock);
+      window.removeEventListener("focus", handleScrollLock);
+      document.removeEventListener("click", handleScrollLock);
+      clearInterval(checkInterval);
+      document.body.style.overflow = "";
+    };
   }, []);
 
   const embedUrlWithReferrer = useMemo(() => {
@@ -214,7 +244,7 @@ export default function GameDetailClient({ game, related }: GameDetailClientProp
     // Check if game instructions actually outline keys explicitly (like Busy Bee Hive or Cat vs Granny)
     const lines = game.instructions.split('\n');
     let hasExplicitPC = false;
-    
+
     lines.forEach(line => {
       if (line.toLowerCase().includes("pc controls") || line.toLowerCase().includes("desktop:")) {
         hasExplicitPC = true;
@@ -327,7 +357,7 @@ export default function GameDetailClient({ game, related }: GameDetailClientProp
     // Check if game instructions explicitly outline mobile controls
     const lines = game.instructions.split('\n');
     let hasExplicitMobile = false;
-    
+
     lines.forEach(line => {
       if (line.toLowerCase().includes("mobile device controls") || line.toLowerCase().includes("mobile:")) {
         hasExplicitMobile = true;
@@ -459,7 +489,7 @@ export default function GameDetailClient({ game, related }: GameDetailClientProp
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 font-sans">
+    <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 font-sans">
       {/* Breadcrumbs */}
       <div className="flex items-center gap-2 text-xs md:text-sm text-slate-400 dark:text-slate-500 mb-6 font-medium">
         <Link
@@ -770,21 +800,71 @@ export default function GameDetailClient({ game, related }: GameDetailClientProp
         </div>
       </section>
 
-      {/* More Games List Grid */}
+      {/* ── More Games in this Category ── */}
       {related.length > 0 && (
-        <section className="pb-8">
+        <section className="pb-2">
           <div className="doodle-separator" />
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="doodle-section-title">
-              <Gamepad2 className="w-5 h-5 text-indigo-500" />
-              <span>More {game.category} Games</span>
-            </h2>
+
+          {/* Section header */}
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-violet-500/30 shrink-0">
+                <Gamepad2 className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <h2 className="text-base md:text-lg font-display font-bold text-slate-800 dark:text-white tracking-wide uppercase leading-none">
+                  More {game.category} Games
+                </h2>
+                <p className="text-[10px] md:text-xs text-slate-400 dark:text-slate-500 font-medium mt-0.5">
+                  {related.length} more games in this category
+                </p>
+              </div>
+            </div>
+            <Link
+              href={`/category/${game.category.toLowerCase()}`}
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-indigo-600 dark:text-violet-400 border border-indigo-200 dark:border-violet-500/30 bg-indigo-50 dark:bg-violet-500/10 hover:bg-indigo-100 dark:hover:bg-violet-500/20 transition-colors"
+            >
+              View all
+              <ChevronRight className="w-3 h-3" />
+            </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {related.map((g) => (
-              <GameCard key={g.id} game={g} />
-            ))}
+
+          {/* Bento grid — same visual language as homepage */}
+          <GameGrid games={related} />
+        </section>
+      )}
+
+      {/* ── You Might Also Like ── */}
+      {suggested.length > 0 && (
+        <section className="pb-10">
+          <div className="doodle-separator" />
+
+          {/* Section header */}
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-fuchsia-500 to-pink-600 flex items-center justify-center shadow-lg shadow-pink-500/30 shrink-0">
+                <Sparkles className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <h2 className="text-base md:text-lg font-display font-bold text-slate-800 dark:text-white tracking-wide uppercase leading-none">
+                  You Might Also Like
+                </h2>
+                <p className="text-[10px] md:text-xs text-slate-400 dark:text-slate-500 font-medium mt-0.5">
+                  Discover games across all genres
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/games"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-fuchsia-600 dark:text-pink-400 border border-fuchsia-200 dark:border-pink-500/30 bg-fuchsia-50 dark:bg-pink-500/10 hover:bg-fuchsia-100 dark:hover:bg-pink-500/20 transition-colors"
+            >
+              Browse all
+              <ChevronRight className="w-3 h-3" />
+            </Link>
           </div>
+
+          {/* Bento grid — consistent style */}
+          <GameGrid games={suggested} />
         </section>
       )}
     </div>

@@ -24,7 +24,8 @@ export default function GameDetailPage({ params }: { params: { slug: string } })
   const game = games.find((g) => g.slug === params.slug);
   if (!game) notFound();
 
-  const related = games.filter((g) => g.category === game.category && g.id !== game.id).slice(0, 5);
+  const related = games.filter((g) => g.category === game.category && g.id !== game.id).slice(0, 24);
+  const suggested = games.filter((g) => g.category !== game.category && g.id !== game.id).slice(0, 24);
 
   // Schema for VideoGame / SoftwareApplication
   const gameSchema = {
@@ -93,7 +94,7 @@ export default function GameDetailPage({ params }: { params: { slug: string } })
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <GameDetailClient game={game} related={related} />
+      <GameDetailClient game={game} related={related} suggested={suggested} />
     </>
   );
 }

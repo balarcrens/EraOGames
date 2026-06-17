@@ -1,123 +1,66 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import type { Game } from "@/types";
-import { Star, Play, Eye, ThumbsUp } from "lucide-react";
+import { Play, Eye, ThumbsUp } from "lucide-react";
 
 interface GameCardProps {
   game: Game;
   index?: number;
 }
 
-export default function GameCard({ game, index = 0 }: GameCardProps) {
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  // Sync favorites state from localStorage on load
-  useEffect(() => {
-    try {
-      const favs = JSON.parse(localStorage.getItem("eraogames_favorites") || "[]");
-      setIsFavorite(favs.includes(game.slug));
-    } catch (_) {}
-
-    // Dynamic listen for updates from other cards or filters
-    const handleFavsUpdate = () => {
-      try {
-        const favs = JSON.parse(localStorage.getItem("eraogames_favorites") || "[]");
-        setIsFavorite(favs.includes(game.slug));
-      } catch (_) {}
-    };
-
-    window.addEventListener("favorites_updated", handleFavsUpdate);
-    return () => window.removeEventListener("favorites_updated", handleFavsUpdate);
-  }, [game.slug]);
-
-  const toggleFavorite = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    try {
-      const favs = JSON.parse(localStorage.getItem("eraogames_favorites") || "[]");
-      let newFavs;
-      if (favs.includes(game.slug)) {
-        newFavs = favs.filter((s: string) => s !== game.slug);
-        setIsFavorite(false);
-      } else {
-        newFavs = [...favs, game.slug];
-        setIsFavorite(true);
-      }
-      localStorage.setItem("eraogames_favorites", JSON.stringify(newFavs));
-      // Dispatch a custom event to notify other components to refresh
-      window.dispatchEvent(new Event("favorites_updated"));
-    } catch (_) {}
-  };
-
-  // We offset grid alignments slightly for fluid visuals without rotations
-  const marginTop = index % 3 === 1 ? "lg:mt-2" : index % 3 === 2 ? "lg:mt-1" : "";
-
+export default function GameCard({ game }: GameCardProps) {
   return (
-    <Link
-      href={`/game/${game.slug}`}
-      className={`sketch-card block group ${marginTop} overflow-hidden`}
-      aria-label={`Play free game: ${game.title}. Like Ratio: ${Math.round((game.rating / 5) * 100)}%`}
-    >
-      {/* Thumbnail area */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-[#0b0e14]">
-        <img
-          src={game.thumbnail}
-          alt={`Thumbnail capture of the game ${game.title}`}
-          className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
-          loading="lazy"
-        />
+    <div className="w-full h-full relative">
+      <Link
+        href={`/game/${game.slug}`}
+        className="w-full h-full block group relative overflow-hidden rounded-xl md:rounded-2xl bg-[#0b0e14] shadow-premium transition-all duration-300 hover:scale-[1.02] hover:shadow-glow hover:border-indigo-500/60 dark:hover:border-violet-500/60"
+        aria-label={`Play free game: ${game.title}. Like Ratio: ${Math.round((game.rating / 5) * 100)}%`}
+      >
+        {/* Full bleed thumbnail */}
+        <div className="absolute inset-0 w-full h-full">
+          <img
+            src={game.thumbnail}
+            alt={game.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            loading="lazy"
+          />
+        </div>
 
-        {/* Dynamic Hover Play Overlay */}
-        <div className="play-overlay">
-          <div className="play-icon">
-            <Play className="w-5 h-5 fill-current ml-0.5" />
+        {/* Dark gradient overlay — stronger at bottom for legible text */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
+
+        {/* Hover play button */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+          <div className="w-11 h-11 rounded-full flex items-center justify-center bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500 text-white shadow-xl shadow-violet-500/50 scale-75 group-hover:scale-100 transition-all duration-300">
+            <Play className="w-4 h-4 fill-current ml-0.5" />
           </div>
         </div>
 
-        {/* Category Badge tag */}
-        <div className="absolute top-2.5 left-2.5">
-          <span className="doodle-badge text-[9px] bg-white/95 dark:bg-[#0e1320]/95 text-indigo-600 dark:text-violet-400 border border-slate-200 dark:border-slate-800 shadow-sm px-2 py-0.5">
+        {/* Category badge — top left */}
+        <div className="absolute top-2 left-2 pointer-events-none">
+          <span className="inline-flex items-center px-1.5 py-0.5 text-[7px] sm:text-[8px] font-bold uppercase tracking-wider bg-black/50 text-violet-300 border border-violet-500/20 rounded backdrop-blur-sm leading-none">
             {game.category}
           </span>
         </div>
 
-        {/* Rating Badge */}
-        <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500 dark:bg-emerald-600 text-white shadow-md text-[10px] font-bold rounded-lg tracking-wide border border-emerald-400/20">
-          <ThumbsUp className="w-3 h-3 fill-current shrink-0" />
+        {/* Like ratio badge — top right */}
+        <div className="absolute top-2 right-2 flex items-center gap-0.5 px-1.5 py-0.5 bg-emerald-500/90 text-white text-[7px] sm:text-[8px] font-bold rounded tracking-wide pointer-events-none">
+          <ThumbsUp className="w-2 h-2 fill-current shrink-0" />
           <span>{Math.round((game.rating / 5) * 100)}%</span>
         </div>
 
-        {/* Interactive Star Favorite Button overlay */}
-        <button
-          onClick={toggleFavorite}
-          className={`absolute bottom-2.5 right-2.5 z-20 w-8 h-8 rounded-xl border flex items-center justify-center transition-all duration-200 shadow-sm ${
-            isFavorite
-              ? "bg-amber-400 border-amber-400 text-slate-900 scale-100"
-              : "bg-white/80 hover:bg-white dark:bg-[#0e1320]/80 dark:hover:bg-[#0e1320] border-slate-200 dark:border-slate-800 text-slate-400 hover:text-amber-500 hover:scale-105"
-          }`}
-          aria-label={isFavorite ? `Remove ${game.title} from favorites bookmark shelf` : `Add ${game.title} to favorites bookmark shelf`}
-        >
-          <Star className={`w-4 h-4 ${isFavorite ? "fill-current text-slate-900" : ""}`} />
-        </button>
-      </div>
-
-      {/* Info card text block below image */}
-      <div className="p-3.5 bg-white dark:bg-[#0e1320] border-t border-slate-100 dark:border-slate-800/80 transition-colors duration-300">
-        <h3 className="font-display font-bold text-sm md:text-base text-slate-800 dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-violet-400 transition-colors duration-200 line-clamp-1">
-          {game.title}
-        </h3>
-        <div className="flex items-center justify-between mt-1.5 text-[11px] text-slate-400 dark:text-slate-500 font-medium">
-          <span className="flex items-center gap-1">
-            <Eye className="w-3.5 h-3.5" />
-            <span>{game.plays.toLocaleString()} plays</span>
-          </span>
-          <span className="text-[9px] uppercase tracking-wider font-bold text-indigo-600 dark:text-violet-400">
-            OG Era
-          </span>
+        {/* Game title + plays — bottom overlay */}
+        <div className="absolute bottom-0 left-0 right-0 px-2.5 pb-2.5 pt-6 pointer-events-none">
+          <h3 className="font-display font-bold leading-tight line-clamp-2 text-white text-[10px] sm:text-[11px] md:text-xs lg:text-sm tracking-wide">
+            {game.title}
+          </h3>
+          <div className="flex items-center gap-1 mt-0.5 text-[8px] sm:text-[9px] text-slate-400 font-medium uppercase tracking-wider">
+            <Eye className="w-2.5 h-2.5 shrink-0" />
+            <span>{game.plays.toLocaleString()}</span>
+          </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 }
