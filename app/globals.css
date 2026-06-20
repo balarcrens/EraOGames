@@ -20,7 +20,16 @@
   }
 
   body {
-    @apply bg-slate-50 dark:bg-[#07090e] text-[#0f172a] dark:text-[#e2e8f0] font-sans antialiased transition-colors duration-300;
+    @apply text-[#0f172a] dark:text-[#e2e8f0] font-sans antialiased transition-colors duration-300;
+    background-color: #f8fafc;
+    background-image: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.05) 0%, #f8fafc 80%);
+    background-attachment: fixed;
+  }
+
+  .dark body {
+    background-color: #06080d;
+    background-image: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.12) 0%, #06080d 80%);
+    background-attachment: fixed;
   }
 
   a, button, select, input[type="range"], input[type="submit"], [role="button"] {
@@ -41,6 +50,15 @@
   }
   ::-webkit-scrollbar-thumb {
     @apply bg-slate-300 dark:bg-[#1b2234] rounded-full border border-solid border-slate-100 dark:border-[#0b0e14] hover:bg-indigo-500 dark:hover:bg-indigo-600 transition-colors;
+  }
+
+  /* Hide scrollbar utility for horizontal components */
+  .scrollbar-none::-webkit-scrollbar {
+    display: none !important;
+  }
+  .scrollbar-none {
+    -ms-overflow-style: none !important;  /* IE and Edge */
+    scrollbar-width: none !important;  /* Firefox */
   }
 }
 
@@ -70,25 +88,65 @@
     transform: translateY(-1px) scale(0.99);
   }
 
-  /* Premium interactive gaming buttons */
+  /* Premium interactive gaming buttons with custom metallic sheen sweep */
   .sketch-btn {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3.5 font-sans font-bold text-sm tracking-wide uppercase rounded-xl
-           bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 text-white shadow-lg shadow-indigo-500/20
-           hover:shadow-indigo-500/40 dark:hover:shadow-violet-600/30 hover:brightness-110 active:scale-[0.97]
-           transition-all duration-200 cursor-pointer relative overflow-hidden;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #d946ef 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
+    cursor: pointer !important;
   }
 
-  .sketch-btn::after {
+  .sketch-btn::before {
     content: '';
-    @apply absolute inset-0 bg-white/10 translate-y-full transition-transform duration-300 ease-out;
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
+    transform: skewX(-25deg);
+    transition: none;
   }
 
-  .sketch-btn:hover::after {
-    @apply translate-y-0;
+  .sketch-btn:hover {
+    background: linear-gradient(135deg, #4f46e5 0%, #d946ef 50%, #6366f1 100%) !important;
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5), 0 0 15px rgba(139, 92, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .sketch-btn:hover::before {
+    animation: sheen 1.4s infinite;
+  }
+
+  .sketch-btn:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 2px 10px rgba(99, 102, 241, 0.2);
   }
 
   .sketch-btn-sm {
-    @apply sketch-btn px-4 py-2.5 text-xs;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.75rem;
   }
 
   /* Input fields refined for cyber gaming dashboard style */
@@ -194,5 +252,14 @@
   }
   button:hover .animate-hover-spin {
     transform: rotate(360deg);
+  }
+
+  @keyframes sheen {
+    0% {
+      transform: translateX(-100%) skewX(-15deg);
+    }
+    100% {
+      transform: translateX(200%) skewX(-15deg);
+    }
   }
 }

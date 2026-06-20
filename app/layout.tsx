@@ -118,7 +118,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Script>
         {/* End Google tag */}
       </head>
-      <body className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#080b11] text-[#0f172a] dark:text-[#f3f4f6] transition-colors duration-300" suppressHydrationWarning>
+      <body className="min-h-screen flex flex-col text-[#0f172a] dark:text-[#f3f4f6] transition-colors duration-300" suppressHydrationWarning>
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe

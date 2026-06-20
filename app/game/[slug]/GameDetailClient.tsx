@@ -65,30 +65,9 @@ export default function GameDetailClient({ game, related, suggested = [] }: Game
     }
   }, []);
 
-  // Handle focus-based scroll lock for the iframe game cabinet
+  // Disabled focus-based scroll lock for the iframe game cabinet to prevent broken scrolling on accidental clicks
   useEffect(() => {
-    const handleScrollLock = () => {
-      // If the iframe is focused, lock parent page scrolling
-      if (document.activeElement === iframeRef.current) {
-        document.body.style.overflow = "hidden";
-      } else {
-        document.body.style.overflow = "";
-      }
-    };
-
-    // Listen to focus/blur/click actions to track active iframe
-    window.addEventListener("blur", handleScrollLock);
-    window.addEventListener("focus", handleScrollLock);
-    document.addEventListener("click", handleScrollLock);
-
-    // Periodic check to capture clicks inside the cross-origin iframe
-    const checkInterval = setInterval(handleScrollLock, 400);
-
     return () => {
-      window.removeEventListener("blur", handleScrollLock);
-      window.removeEventListener("focus", handleScrollLock);
-      document.removeEventListener("click", handleScrollLock);
-      clearInterval(checkInterval);
       document.body.style.overflow = "";
     };
   }, []);
