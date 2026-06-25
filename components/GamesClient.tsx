@@ -449,7 +449,7 @@ export default function GamesClient({ games, categories, hideFilters = false }: 
     <div className={hideFilters ? "w-full" : "grid grid-cols-1 lg:grid-cols-4 gap-8"}>
       {/* Filters Sidebar - Desktop Only */}
       {!hideFilters && (
-        <div className="hidden lg:block lg:col-span-1">
+        <div className="hidden lg:block lg:col-span-1 animate-fade-in-up">
           <div className="bg-white dark:bg-[#121824] border border-slate-200 dark:border-slate-800 p-5 md:p-6 rounded-2xl shadow-premium sticky top-24">
             {renderFilterContent(false)}
           </div>
@@ -461,18 +461,19 @@ export default function GamesClient({ games, categories, hideFilters = false }: 
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true">
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm transition-opacity duration-300"
+            className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm transition-all duration-300"
+            style={{ animation: 'fadeIn 0.2s ease-out' }}
             onClick={() => setMobileFilterOpen(false)}
           />
           {/* Drawer content */}
-          <div className="fixed inset-y-0 right-0 w-full max-w-xs bg-white dark:bg-[#121824] p-6 shadow-2xl flex flex-col h-full overflow-y-auto border-l border-slate-200 dark:border-slate-800 transition-transform duration-300 ease-out translate-x-0">
+          <div className="fixed inset-y-0 right-0 w-full max-w-xs bg-white dark:bg-[#121824] p-6 shadow-2xl flex flex-col h-full overflow-y-auto border-l border-slate-200 dark:border-slate-800 transition-all duration-300 ease-out translate-x-0">
             {renderFilterContent(true)}
           </div>
         </div>
       )}
 
       {/* Games Grid Results */}
-      <div className={hideFilters ? "w-full space-y-6" : "lg:col-span-3 space-y-6"}>
+      <div className={hideFilters ? "w-full space-y-6" : "lg:col-span-3 space-y-6 animate-fade-in-up animate-delay-100"}>
         {!hideFilters && (
           <div id="game-explorer-header" className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800 scroll-mt-24">
             <h1 className="text-lg md:text-xl font-display font-bold text-slate-800 dark:text-white flex items-center gap-2">
@@ -550,7 +551,7 @@ export default function GamesClient({ games, categories, hideFilters = false }: 
             {/* Centered Pagination Control board with aria attributes */}
             {totalPages > 1 && (
               <div 
-                className="flex justify-center items-center gap-2 pt-6 border-t border-slate-100 dark:border-slate-800/80" 
+                className="animate-fade-in-up flex justify-center items-center gap-2 pt-6 border-t border-slate-100 dark:border-slate-800/80" 
                 aria-label="Games list pagination"
                 role="navigation"
               >
@@ -605,7 +606,7 @@ export default function GamesClient({ games, categories, hideFilters = false }: 
             )}
           </div>
         ) : (
-          <div className="text-center py-20 bg-white dark:bg-[#121824] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-premium flex flex-col items-center justify-center p-8">
+          <div className="animate-scale-in text-center py-20 bg-white dark:bg-[#121824] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-premium flex flex-col items-center justify-center p-8">
             <div className="w-16 h-16 bg-red-500/10 border border-red-500/20 flex items-center justify-center rounded-2xl mb-4 text-red-500">
               <Gamepad2 className="w-8 h-8" />
             </div>

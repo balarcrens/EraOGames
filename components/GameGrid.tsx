@@ -17,7 +17,7 @@ export default function GameGrid({ games }: GameGridProps) {
   };
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 grid-flow-row-dense auto-rows-[130px] sm:auto-rows-[130px] md:auto-rows-[140px] lg:auto-rows-[158px] w-full">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 grid-flow-row-dense auto-rows-[130px] sm:auto-rows-[120px] md:auto-rows-[130px] lg:auto-rows-[145px] xl:auto-rows-[160px] w-full">
       {games.map((game, index) => (
         <div key={game.id} className={`${getSpanClass(index)} w-full h-full min-h-0`}>
           <GameCard game={game} index={index} />

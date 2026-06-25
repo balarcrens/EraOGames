@@ -10,7 +10,7 @@ export default function AboutPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 md:py-12 text-slate-700 dark:text-slate-400 font-sans">
       {/* Breadcrumbs */}
-      <div className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500 mb-8 font-medium">
+      <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-8 font-medium">
         <Link href="/" className="flex items-center gap-1 hover:text-indigo-600 transition-colors">
           <Home className="w-3.5 h-3.5" />
           <span>Home</span>
@@ -25,7 +25,7 @@ export default function AboutPage() {
           About EraOGames
           <span className="absolute -bottom-1.5 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full" />
         </h1>
-        <p className="text-base text-slate-400 dark:text-slate-500 mt-4 max-w-lg mx-auto font-medium">
+        <p className="text-base text-slate-500 dark:text-slate-400 mt-4 max-w-lg mx-auto font-medium">
           Making online gaming free, responsive, instant, and high-fidelity for everyone.
         </p>
       </div>
@@ -74,7 +74,7 @@ export default function AboutPage() {
               <h3 className="font-display font-bold text-base md:text-lg mb-2 text-slate-800 dark:text-white">
                 {item.title}
               </h3>
-              <p className="text-xs md:text-sm text-slate-400 dark:text-slate-500 leading-relaxed font-medium">
+              <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
                 {item.desc}
               </p>
             </div>
@@ -110,7 +110,7 @@ export default function AboutPage() {
                   {member.name.charAt(0)}
                 </div>
                 <h3 className="font-display font-bold text-base text-slate-800 dark:text-white">{member.name}</h3>
-                <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider mb-2">
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider mb-2">
                   {member.role}
                 </p>
                 <p className="text-xs italic text-slate-500 dark:text-slate-400 leading-relaxed font-medium">

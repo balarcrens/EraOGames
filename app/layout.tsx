@@ -62,7 +62,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const jsonLd = {
+  const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "EraOGames",
@@ -73,6 +73,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       "target": "https://eraogames.vercel.app/games?search={search_term_string}",
       "query-input": "required name=search_term_string"
     }
+  };
+
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "EraOGames",
+    "alternateName": ["OG Era Games", "Era of Games"],
+    "url": "https://eraogames.vercel.app",
+    "description": "Play thousands of free browser games instantly. No downloads, no installations. Premium browser-based gaming on any device.",
+    "foundingDate": "2025",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "support@eraogames.com",
+      "contactType": "customer support"
+    },
+    "sameAs": [
+      "https://twitter.com/eraogames"
+    ]
   };
 
   return (
@@ -100,7 +118,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
         {/* Google tag (gtag.js) */}
         <Script

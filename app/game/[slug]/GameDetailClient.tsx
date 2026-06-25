@@ -598,11 +598,11 @@ export default function GameDetailClient({ game, related, suggested = [] }: Game
       {/* Game Screen Container - scaled height/width */}
       <div
         ref={containerRef}
-        className={`relative w-full mb-6 md:mb-8 bg-[#080b11] border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden rounded-3xl transition-colors ${isFullscreen
+        className={`relative w-full mb-6 md:mb-8 bg-slate-100 dark:bg-[#080b11] border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden rounded-3xl transition-colors ${isFullscreen
           ? "fixed inset-0 z-50 rounded-none w-screen h-screen m-0"
           : isTheaterMode
             ? "w-full h-[80vh] max-h-[90vh] md:h-[85vh] lg:h-[90vh]"
-            : "w-full h-[70vh] min-h-[460px] max-h-[600px] sm:h-auto sm:aspect-[16/9] md:min-h-[500px] lg:min-h-[600px] xl:min-h-[700px]"
+            : "w-full h-[50vh] min-h-[280px] max-h-[400px] sm:h-auto sm:aspect-[16/9] sm:min-h-[400px] md:min-h-[500px] lg:min-h-[600px] xl:min-h-[700px]"
           }`}
       >
         {isLoading && (
@@ -801,7 +801,7 @@ export default function GameDetailClient({ game, related, suggested = [] }: Game
             </div>
             <Link
               href={`/category/${game.category.toLowerCase()}`}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-indigo-600 dark:text-violet-400 border border-indigo-200 dark:border-violet-500/30 bg-indigo-50 dark:bg-violet-500/10 hover:bg-indigo-100 dark:hover:bg-violet-500/20 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-indigo-600 dark:text-violet-400 border border-indigo-200 dark:border-violet-500/30 bg-indigo-50 dark:bg-violet-500/10 hover:bg-indigo-100 dark:hover:bg-violet-500/20 transition-colors"
             >
               View all
               <ChevronRight className="w-3 h-3" />
@@ -835,7 +835,7 @@ export default function GameDetailClient({ game, related, suggested = [] }: Game
             </div>
             <Link
               href="/games"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-fuchsia-600 dark:text-pink-400 border border-fuchsia-200 dark:border-pink-500/30 bg-fuchsia-50 dark:bg-pink-500/10 hover:bg-fuchsia-100 dark:hover:bg-pink-500/20 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-fuchsia-600 dark:text-pink-400 border border-fuchsia-200 dark:border-pink-500/30 bg-fuchsia-50 dark:bg-pink-500/10 hover:bg-fuchsia-100 dark:hover:bg-pink-500/20 transition-colors"
             >
               Browse all
               <ChevronRight className="w-3 h-3" />

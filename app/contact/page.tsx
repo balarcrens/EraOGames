@@ -30,7 +30,7 @@ export default function ContactPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 md:py-12 text-slate-700 dark:text-slate-300 font-sans">
       {/* Breadcrumbs */}
-      <div className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500 mb-8 font-medium">
+      <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-8 font-medium">
         <Link href="/" className="flex items-center gap-1 hover:text-indigo-600 transition-colors">
           <Home className="w-3.5 h-3.5" />
           <span>Home</span>
@@ -45,7 +45,7 @@ export default function ContactPage() {
           Drop a Message!
           <span className="absolute -bottom-1.5 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full" />
         </h1>
-        <p className="text-base text-slate-400 dark:text-slate-500 mt-4 max-w-lg mx-auto font-medium">
+        <p className="text-base text-slate-500 dark:text-slate-400 mt-4 max-w-lg mx-auto font-medium">
           Have game suggestions, bug reports, or general feedback? Send us a note below!
         </p>
       </div>
@@ -58,7 +58,7 @@ export default function ContactPage() {
               <Mail className="w-5 h-5 text-indigo-500" />
               <span>Direct Mail</span>
             </h3>
-            <p className="text-sm text-slate-400 dark:text-slate-500 font-medium leading-relaxed mb-3">
+            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-3">
               You can reach our primary inbox directly at:
             </p>
             <a
@@ -74,7 +74,7 @@ export default function ContactPage() {
               <Clock className="w-5 h-5 text-violet-500" />
               <span>Response Time</span>
             </h3>
-            <p className="text-sm text-slate-400 dark:text-slate-500 font-medium leading-relaxed">
+            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
               We read every single message and report we get! Expect an email response from our support team within <span className="font-bold text-slate-700 dark:text-slate-200">24 to 48 hours</span>.
             </p>
           </div>
@@ -89,7 +89,7 @@ export default function ContactPage() {
                 <Star className="w-7 h-7 fill-current" />
               </div>
               <h2 className="text-xl md:text-2xl font-display font-bold text-slate-800 dark:text-white mb-2">Message Sent!</h2>
-              <p className="text-sm text-slate-400 dark:text-slate-500 mb-6 leading-relaxed max-w-sm mx-auto font-medium">
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed max-w-sm mx-auto font-medium">
                 Thank you for reaching out! Your thoughts have been pinned to our board. We&apos;ll get back to you shortly.
               </p>
               <button
@@ -111,7 +111,7 @@ export default function ContactPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                     Your Name
                   </label>
                   <input
@@ -124,7 +124,7 @@ export default function ContactPage() {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                     Email Address
                   </label>
                   <input
@@ -139,7 +139,7 @@ export default function ContactPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Topic / Subject
                 </label>
                 <div className="relative">
@@ -153,14 +153,14 @@ export default function ContactPage() {
                     <option value="suggestion">Game Submission / Suggestion</option>
                     <option value="business">Partnerships & Other</option>
                   </select>
-                  <div className="absolute pointer-events-none right-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-xs">
+                  <div className="absolute pointer-events-none right-3.5 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 text-xs">
                     ▼
                   </div>
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Your Message
                 </label>
                 <textarea

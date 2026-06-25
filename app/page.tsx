@@ -15,7 +15,7 @@ function LobbyLoader() {
 
 export default function HomePage() {
   return (
-    <div className="w-full max-w-none px-4 sm:px-6 md:px-8 py-6 md:py-10">
+    <div className="w-full max-w-none">
       <Suspense fallback={<LobbyLoader />}>
         <PremiumLobby games={games} categories={categories} />
       </Suspense>

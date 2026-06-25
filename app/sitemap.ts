@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { games, categories } from "@/data/games";
+import { blogPosts } from "@/data/blog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://eraogames.vercel.app";
@@ -13,6 +14,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/privacy",
     "/terms",
     "/cookies",
+    "/dmca",
+    "/disclaimer",
+    "/editorial-policy",
+    "/blog",
     "/category/all",
   ].map((route) => ({
     url: `${baseUrl}${route}/`,
@@ -37,5 +42,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...routes, ...categoryRoutes, ...gameRoutes];
+  // Blog posts
+  const blogRoutes = blogPosts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}/`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  return [...routes, ...categoryRoutes, ...gameRoutes, ...blogRoutes];
 }

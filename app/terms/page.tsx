@@ -10,7 +10,7 @@ export default function TermsPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-10 md:py-16 text-slate-700 dark:text-slate-400 font-sans">
       {/* Breadcrumbs */}
-      <div className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500 mb-8 font-semibold">
+      <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-8 font-semibold">
         <Link 
           href="/" 
           className="flex items-center gap-1 hover:text-indigo-600 transition-colors"
@@ -34,7 +34,7 @@ export default function TermsPage() {
           Terms of Service
           <span className="absolute -bottom-2 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full" />
         </h1>
-        <p className="text-xs text-slate-400 dark:text-slate-500 mt-5 font-bold uppercase tracking-widest">
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-5 font-bold uppercase tracking-widest">
           Last updated: June 12, 2026
         </p>
       </div>

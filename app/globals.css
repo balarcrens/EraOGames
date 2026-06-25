@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap');
 
 :root {
   --shadow-color: rgba(99, 102, 241, 0.05);
@@ -20,15 +20,15 @@
   }
 
   body {
-    @apply text-[#0f172a] dark:text-[#e2e8f0] font-sans antialiased transition-colors duration-300;
+    @apply text-slate-900 dark:text-[#e2e8f0] font-sans antialiased transition-colors duration-300;
     background-color: #f8fafc;
     background-image: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.05) 0%, #f8fafc 80%);
     background-attachment: fixed;
   }
 
-  .dark body {
-    background-color: #06080d;
-    background-image: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.12) 0%, #06080d 80%);
+  :root.dark body {
+    background-color: #000000;
+    background-image: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.08) 0%, #000000 90%);
     background-attachment: fixed;
   }
 
@@ -238,8 +238,23 @@
   .rotate-1, .rotate-2, .rotate-neg1, .rotate-neg2 {
     transform: rotate(0deg) !important;
   }
-  .sketch-delay-100, .sketch-delay-200, .sketch-delay-300, .sketch-delay-400, .sketch-delay-500 {
-    animation-delay: 0s !important;
+
+  /* Animation delay utilities for stagger entrance */
+  .animate-delay-100 { animation-delay: 0.1s !important; }
+  .animate-delay-200 { animation-delay: 0.2s !important; }
+  .animate-delay-300 { animation-delay: 0.3s !important; }
+  .animate-delay-400 { animation-delay: 0.4s !important; }
+  .animate-delay-500 { animation-delay: 0.5s !important; }
+  .animate-delay-600 { animation-delay: 0.6s !important; }
+  .animate-delay-700 { animation-delay: 0.7s !important; }
+
+  /* Ensure animations respect their fill mode */
+  .animate-fade-in,
+  .animate-fade-in-up,
+  .animate-fade-in-down,
+  .animate-scale-in,
+  .animate-slide-up {
+    opacity: 0;
   }
   
   /* Animatable spin elements */
@@ -262,4 +277,43 @@
       transform: translateX(200%) skewX(-15deg);
     }
   }
+
+  /* Slanted card floating styles */
+  .hero-card-slanted {
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+    box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.8);
+  }
+
+  .hero-card-slanted:hover {
+    transform: translateY(-16px) rotate(0deg) scale(1.06) !important;
+    z-index: 40 !important;
+    box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.4);
+    border-color: rgba(99, 102, 241, 0.6) !important;
+  }
+
+  /* Neon text gradients */
+  .text-gradient-cyan {
+    background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 50%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-purple {
+    background: linear-gradient(135deg, #a855f7 0%, #d946ef 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Glowing indicators */
+  .glow-indigo {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
+  }
+  .glow-cyan {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.25);
+  }
+  
+  .glow-hover:hover {
+    box-shadow: 0 0 25px 5px rgba(139, 92, 246, 0.35);
+  }
 }
+
